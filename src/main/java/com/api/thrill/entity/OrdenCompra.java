@@ -20,7 +20,7 @@ public class OrdenCompra {
     private LocalDateTime fecha;
 
     private double total;
-
+// es mas practico unirlo a usuario-direccion
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;

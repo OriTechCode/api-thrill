@@ -16,4 +16,6 @@ public class Direccion {
     private String calle;
     private String localidad;
     private String codpostal;
+    //onetomany a usuario
+
 }

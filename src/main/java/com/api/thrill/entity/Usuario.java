@@ -27,7 +27,7 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     private List<OrdenCompra> ordenes;
-
+//esta bien , solo hay que relaconarlo en la tabla direccion
     @ManyToMany
     @JoinTable(
             name = "usuario_direccion",
