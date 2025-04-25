@@ -6,15 +6,13 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Producto {
+@Table(name = "productos")
+public class Producto extends Base {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
 
     private String nombre;
     private int cantidad;
@@ -34,7 +32,7 @@ public class Producto {
     private List<DetalleOrden> detalles;
 
 // esto no deberia ser un one to many ?
-    @ManyToMany
+    @OneToMany
     @JoinTable(
             name = "talle_producto",
             joinColumns = @JoinColumn(name = "id_producto"),

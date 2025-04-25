@@ -4,15 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DetalleOrden {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "detalles")
+public class DetalleOrden extends Base  {
 
     private int cantidad;
     private double precio;

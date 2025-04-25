@@ -4,17 +4,18 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Talle {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "talles")
+public class Talle extends Base {
 
     private String talle;
-//a nivel normalizacion esta mal , a nivel practica nos conviene , que hacemos ?
+
+    @ManyToOne
+    private Producto producto;
+
+//a nivel normalizacion esta mal , a nivel practica nos conviene
     @ManyToOne
     private Tipo tipo;
 }
