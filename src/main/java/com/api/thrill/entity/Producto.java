@@ -26,12 +26,14 @@ public class Producto {
     @ManyToOne
     private Categoria categoria;
 
+    //esto es redundante por parte de la normalizacion , pero es practico para nosotros
     @ManyToOne
     private Tipo tipo;
 
     @OneToMany(mappedBy = "producto")
     private List<DetalleOrden> detalles;
 
+// esto no deberia ser un one to many ?
     @ManyToMany
     @JoinTable(
             name = "talle_producto",
@@ -40,7 +42,7 @@ public class Producto {
     )
     private List<Talle> talles;
 
-    @ManyToMany
+    @ManyToMany// en efecto , esta hecha como los dioses , dea
     @JoinTable(
             name = "descuento_producto",
             joinColumns = @JoinColumn(name = "id_producto"),
