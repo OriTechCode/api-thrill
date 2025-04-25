@@ -6,15 +6,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Descuento {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "descuentos")
+public class Descuento extends Base {
 
     private LocalDate fechaInicio;
     private LocalDate fechaFin;

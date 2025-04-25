@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Direccion {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "direcciones")
+public class Direccion extends Base  {
 
     private String calle;
     private String localidad;
     private String codpostal;
-    //onetomany a usuario
+
+
+    @ManyToOne
+    private Usuario usuario;
 
 }

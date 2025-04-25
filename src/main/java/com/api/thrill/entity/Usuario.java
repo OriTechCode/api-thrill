@@ -6,15 +6,11 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Usuario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "usuarios")
+public class Usuario extends Base {
 
     private String nombre;
 
@@ -27,8 +23,9 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     private List<OrdenCompra> ordenes;
-//esta bien , solo hay que relaconarlo en la tabla direccion
-    @ManyToMany
+
+
+    @OneToMany
     @JoinTable(
             name = "usuario_direccion",
             joinColumns = @JoinColumn(name = "id_usuario"),
