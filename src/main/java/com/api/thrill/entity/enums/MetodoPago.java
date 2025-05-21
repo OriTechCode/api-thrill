@@ -1,6 +1,6 @@
 package com.api.thrill.entity.enums;
 
-public enum FormaPago {
+public enum MetodoPago {
     EFECTIVO,
     MERCADOPAGO
 }

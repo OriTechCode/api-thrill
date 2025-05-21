@@ -2,7 +2,7 @@ package com.api.thrill.controller;
 
 import com.api.thrill.entity.OrdenCompra;
 import com.api.thrill.service.OrdenCompraService;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,47 +10,36 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ordenes")
-@CrossOrigin(origins = "*")
 public class OrdenCompraController {
 
-    private final OrdenCompraService ordenCompraService;
-
-    public OrdenCompraController(OrdenCompraService ordenCompraService) {
-        this.ordenCompraService = ordenCompraService;
-    }
+    @Autowired
+    private OrdenCompraService ordenCompraService;
 
     @GetMapping
-    public List<OrdenCompra> listar() {
-        return ordenCompraService.listarTodas();
+    public ResponseEntity<List<OrdenCompra>> getAll() {
+        return ResponseEntity.ok(ordenCompraService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrdenCompra> obtenerPorId(@PathVariable Long id) {
-        return ordenCompraService.buscarPorId(id)
+    public ResponseEntity<OrdenCompra> getById(@PathVariable Long id) {
+        return ordenCompraService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<OrdenCompra> crear(@RequestBody OrdenCompra ordenCompra) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(ordenCompraService.guardar(ordenCompra));
+    public ResponseEntity<OrdenCompra> create(@RequestBody OrdenCompra ordenCompra) {
+        return ResponseEntity.ok(ordenCompraService.save(ordenCompra));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrdenCompra> actualizar(@PathVariable Long id, @RequestBody OrdenCompra ordenCompra) {
-        return ordenCompraService.buscarPorId(id)
-                .map(o -> {
-                    ordenCompra.setId(id);
-                    return ResponseEntity.ok(ordenCompraService.guardar(ordenCompra));
-                }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<OrdenCompra> update(@PathVariable Long id, @RequestBody OrdenCompra ordenCompra) {
+        return ResponseEntity.ok(ordenCompraService.update(id, ordenCompra));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        if (ordenCompraService.buscarPorId(id).isPresent()) {
-            ordenCompraService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        ordenCompraService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

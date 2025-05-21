@@ -6,6 +6,8 @@ import lombok.*;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,19 +19,17 @@ public class Usuario extends Base {
     @Column(unique = true)
     private String email;
 
-    private String contraseña;
+    private String contrasena;
 
     private String rol; // ADMIN / USER
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "imagen_id")
+    private Imagen imagenPerfil;
 
     @OneToMany(mappedBy = "usuario")
     private List<OrdenCompra> ordenes;
 
-
-    @OneToMany
-    @JoinTable(
-            name = "usuario_direccion",
-            joinColumns = @JoinColumn(name = "id_usuario"),
-            inverseJoinColumns = @JoinColumn(name = "id_direccion")
-    )
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Direccion> direcciones;
 }
