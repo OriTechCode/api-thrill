@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin(origins = "*")
 public class ProductoController {
 
     private final ProductoService productoService;
@@ -20,37 +19,38 @@ public class ProductoController {
     }
 
     @GetMapping
-    public List<Producto> listar() {
-        return productoService.listarTodos();
+    public ResponseEntity<List<Producto>> listar() {
+        return ResponseEntity.ok(productoService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Producto> obtenerPorId(@PathVariable Long id) {
-        return productoService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(productoService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<Producto> crear(@RequestBody Producto producto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productoService.guardar(producto));
+        return ResponseEntity.ok(productoService.save(producto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Producto producto) {
-        return productoService.buscarPorId(id)
-                .map(p -> {
-                    producto.setId(id);
-                    return ResponseEntity.ok(productoService.guardar(producto));
-                }).orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(productoService.update(id, producto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        if (productoService.buscarPorId(id).isPresent()) {
-            productoService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> eliminarLogico(@PathVariable Long id) {
+        productoService.deleteLogic(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/buscar/nombre")
+    public ResponseEntity<List<Producto>> buscarPorNombre(@RequestParam String nombre) {
+        return ResponseEntity.ok(productoService.findByNombre(nombre));
+    }
+
+    @GetMapping("/buscar/marca")
+    public ResponseEntity<List<Producto>> buscarPorMarca(@RequestParam String marca) {
+        return ResponseEntity.ok(productoService.findByMarca(marca));
     }
 }

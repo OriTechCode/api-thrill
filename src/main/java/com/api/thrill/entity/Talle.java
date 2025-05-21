@@ -6,6 +6,8 @@ import lombok.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "talles")
 public class Talle extends Base {

@@ -3,16 +3,17 @@ package com.api.thrill.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Table(name = "productos")
 public class Producto extends Base {
-
-
 
     private String nombre;
     private int cantidad;
@@ -21,8 +22,12 @@ public class Producto extends Base {
     private String color;
     private String marca;
 
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Imagen> imagenes = new ArrayList<>();
+
     @ManyToOne
-    private Categoria categoria;
+    @JoinColumn(name = "subcategoria_id")
+    private SubCategoria subcategoria;
 
     //esto es redundante por parte de la normalizacion , pero es practico para nosotros
     @ManyToOne
@@ -40,7 +45,7 @@ public class Producto extends Base {
     )
     private List<Talle> talles;
 
-    @ManyToMany// en efecto , esta hecha como los dioses , dea
+    @ManyToMany  // en efecto, esta hecha como los dioses, dea
     @JoinTable(
             name = "descuento_producto",
             joinColumns = @JoinColumn(name = "id_producto"),

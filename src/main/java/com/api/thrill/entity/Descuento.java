@@ -1,4 +1,5 @@
 package com.api.thrill.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,6 +9,8 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "descuentos")
 public class Descuento extends Base {

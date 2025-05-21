@@ -6,6 +6,8 @@ import lombok.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "detalles")
 public class DetalleOrden extends Base  {

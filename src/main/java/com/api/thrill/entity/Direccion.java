@@ -6,6 +6,8 @@ import lombok.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "direcciones")
 public class Direccion extends Base  {
@@ -16,6 +18,7 @@ public class Direccion extends Base  {
 
 
     @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
 }

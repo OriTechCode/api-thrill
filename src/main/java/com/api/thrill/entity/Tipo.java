@@ -8,6 +8,8 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
 @Table(name = "tipos")
 public class Tipo extends Base {
