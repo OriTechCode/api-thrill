@@ -49,7 +49,7 @@ public class MercadoPagoService {
 
             // Configurar el pagador
             PreferencePayerRequest payer = PreferencePayerRequest.builder()
-                    .name(orden.getUsuario().getNombre())
+                    .name(orden.getUsuario().getUsername())
                     .email(orden.getUsuario().getEmail())
                     .build();
 
