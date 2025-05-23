@@ -3,61 +3,45 @@ package com.api.thrill.service.impl;
 import com.api.thrill.entity.Descuento;
 import com.api.thrill.repository.DescuentoRepository;
 import com.api.thrill.service.DescuentoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
-@Transactional
-public class DescuentoServiceImpl implements DescuentoService {
+public class DescuentoServiceImpl extends BaseServiceImpl<Descuento, Long> implements DescuentoService {
 
-    @Autowired
-    private DescuentoRepository descuentoRepository;
+    private final DescuentoRepository descuentoRepository;
 
-    @Override
-    public List<Descuento> findAll() {
-        return descuentoRepository.findAll();
-    }
-
-    @Override
-    public Descuento findById(Long id) {
-        return descuentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Descuento no encontrado"));
+    public DescuentoServiceImpl(DescuentoRepository descuentoRepository) {
+        super(descuentoRepository);
+        this.descuentoRepository = descuentoRepository;
     }
 
     @Override
     public List<Descuento> findDescuentosVigentes() {
         LocalDate now = LocalDate.now();
-        return descuentoRepository
-                .findByFechaFinGreaterThanEqualAndFechaInicioLessThanEqual(now, now);
+        return descuentoRepository.findByFechaFinGreaterThanEqualAndFechaInicioLessThanEqual(now, now);
     }
 
     @Override
     public Descuento save(Descuento descuento) {
         validarFechas(descuento);
-        return descuentoRepository.save(descuento);
+        return super.save(descuento); // Reutilizamos la lógica genérica
     }
 
     @Override
     public Descuento update(Long id, Descuento descuento) {
-        Descuento descuentoExistente = findById(id);
+        Descuento descuentoExistente = super.findById(id)
+                .orElseThrow(() -> new RuntimeException("Descuento no encontrado"));
+
         validarFechas(descuento);
 
         descuentoExistente.setFechaInicio(descuento.getFechaInicio());
         descuentoExistente.setFechaFin(descuento.getFechaFin());
         descuentoExistente.setPorcentajeDesc(descuento.getPorcentajeDesc());
 
-        return descuentoRepository.save(descuentoExistente);
-    }
-
-    @Override
-    public void delete(Long id) {
-        Descuento descuento = findById(id);
-        descuento.setEliminado(true);
-        descuentoRepository.save(descuento);
+        return super.save(descuentoExistente); // Reutilizamos la lógica genérica
     }
 
     private void validarFechas(Descuento descuento) {

@@ -8,42 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductoServiceImpl implements ProductoService {
+public class ProductoServiceImpl extends BaseServiceImpl<Producto, Long> implements ProductoService {
 
     private final ProductoRepository productoRepository;
 
     public ProductoServiceImpl(ProductoRepository productoRepository) {
+        super(productoRepository); // Pasamos ProductoRepository al constructor de BaseServiceImpl
         this.productoRepository = productoRepository;
-    }
-
-    @Override
-    public List<Producto> findAll() {
-        return productoRepository.findAll();
-    }
-
-    @Override
-    public Producto findById(Long id) {
-        return productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-    }
-
-    @Override
-    public Producto save(Producto producto) {
-        return productoRepository.save(producto);
-    }
-
-    @Override
-    public Producto update(Long id, Producto producto) {
-        Producto actual = findById(id);
-        producto.setId(actual.getId());
-        return productoRepository.save(producto);
-    }
-
-    @Override
-    public void deleteLogic(Long id) {
-        Producto producto = findById(id);
-        producto.setEliminado(true);
-        productoRepository.save(producto);
     }
 
     @Override
@@ -54,5 +25,12 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public List<Producto> findByMarca(String marca) {
         return productoRepository.findByMarcaIgnoreCase(marca);
+    }
+
+
+    @Override
+    public List<Producto> findBySubcategoriaNombre(String nombreSubcategoria) {
+        // Implementación del método para buscar productos por nombre de subcategoría
+        return productoRepository.findBySubcategoriaNombreIgnoreCase(nombreSubcategoria);
     }
 }
