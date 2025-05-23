@@ -30,8 +30,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .anyRequest().authenticated())
+                                .requestMatchers(
+                                        "/v3/api-docs/**",   // Documentación OpenAPI
+                                        "/swagger-ui/**",    // Recursos de Swagger UI
+                                        "/swagger-ui.html",  // Interfaz gráfica de Swagger
+                                        "/api/auth/**"       // Rutas públicas de autenticación
+                                ).permitAll() // Permitir acceso público a estas rutas
+                                .anyRequest().authenticated() // Requiere autenticación para el resto
+                )
                 .sessionManagement(sessionManager ->
                         sessionManager
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
