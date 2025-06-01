@@ -14,13 +14,13 @@ public class SubCategoriaController extends BaseController<SubCategoria, Long> {
     private final SubCategoriaService subCategoriaService;
 
     public SubCategoriaController(SubCategoriaService subCategoriaService) {
-        super(subCategoriaService); // Pasamos el servicio al constructor de BaseController
+        super(subCategoriaService);
         this.subCategoriaService = subCategoriaService;
     }
 
     @GetMapping("/categoria/{categoriaId}")
     public ResponseEntity<List<SubCategoria>> findByCategoriaId(@PathVariable Long categoriaId) {
-        // Llamamos al servicio específico para obtener las subcategorías por categoría
+
         return ResponseEntity.ok(subCategoriaService.findByCategoriaId(categoriaId));
     }
 }

@@ -27,7 +27,7 @@ public class DescuentoServiceImpl extends BaseServiceImpl<Descuento, Long> imple
     @Override
     public Descuento save(Descuento descuento) {
         validarFechas(descuento);
-        return super.save(descuento); // Reutilizamos la lógica genérica
+        return super.save(descuento);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DescuentoServiceImpl extends BaseServiceImpl<Descuento, Long> imple
         descuentoExistente.setFechaFin(descuento.getFechaFin());
         descuentoExistente.setPorcentajeDesc(descuento.getPorcentajeDesc());
 
-        return super.save(descuentoExistente); // Reutilizamos la lógica genérica
+        return super.save(descuentoExistente);
     }
 
     private void validarFechas(Descuento descuento) {

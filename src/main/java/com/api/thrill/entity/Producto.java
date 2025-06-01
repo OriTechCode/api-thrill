@@ -1,5 +1,6 @@
 package com.api.thrill.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,6 +44,7 @@ public class Producto extends Base {
             joinColumns = @JoinColumn(name = "id_producto"),
             inverseJoinColumns = @JoinColumn(name = "id_talle")
     )
+    @JsonManagedReference
     private List<Talle> talles;
 
     @ManyToMany  // en efecto, esta hecha como los dioses, dea

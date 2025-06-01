@@ -11,7 +11,7 @@ public class TipoServiceImpl extends BaseServiceImpl<Tipo, Long> implements Tipo
     private final TipoRepository tipoRepository;
 
     public TipoServiceImpl(TipoRepository tipoRepository) {
-        super(tipoRepository); // Pasamos TipoRepository al constructor de la clase base
+        super(tipoRepository);
         this.tipoRepository = tipoRepository;
     }
 }

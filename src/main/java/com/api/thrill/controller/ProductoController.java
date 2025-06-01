@@ -14,7 +14,7 @@ public class ProductoController extends BaseController<Producto, Long> {
     private final ProductoService productoService;
 
     public ProductoController(ProductoService productoService) {
-        super(productoService); // Inyecta ProductoService en BaseController
+        super(productoService);
         this.productoService = productoService;
     }
 
@@ -31,7 +31,7 @@ public class ProductoController extends BaseController<Producto, Long> {
 
     @GetMapping("/buscar/subcategoria")
     public ResponseEntity<List<Producto>> buscarPorSubcategoria(@RequestParam String nombreSubcategoria) {
-        // Nuevo endpoint para buscar productos por subcategoría
+
         return ResponseEntity.ok(productoService.findBySubcategoriaNombre(nombreSubcategoria));
     }
 }

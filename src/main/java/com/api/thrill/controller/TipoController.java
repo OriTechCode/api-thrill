@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TipoController extends BaseController<Tipo, Long> {
 
     public TipoController(TipoService tipoService) {
-        super(tipoService); // Inyectamos TipoService en la clase base genérica
+        super(tipoService);
     }
 }

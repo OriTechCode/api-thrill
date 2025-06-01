@@ -14,19 +14,19 @@ public class TalleController extends BaseController<Talle, Long> {
     private final TalleService talleService;
 
     public TalleController(TalleService talleService) {
-        super(talleService); // Pasamos el servicio al constructor de BaseController
+        super(talleService);
         this.talleService = talleService;
     }
 
     @GetMapping("/tipo/{tipoId}")
     public ResponseEntity<List<Talle>> findByTipoId(@PathVariable Long tipoId) {
-        // Endpoint para buscar talles por tipo
+
         return ResponseEntity.ok(talleService.findByTipoId(tipoId));
     }
 
     @GetMapping("/producto/{productoId}")
     public ResponseEntity<List<Talle>> findByProductoId(@PathVariable Long productoId) {
-        // Endpoint para buscar talles por producto
+
         return ResponseEntity.ok(talleService.findByProductoId(productoId));
     }
 }
