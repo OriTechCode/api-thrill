@@ -13,7 +13,7 @@ public class ProductoServiceImpl extends BaseServiceImpl<Producto, Long> impleme
     private final ProductoRepository productoRepository;
 
     public ProductoServiceImpl(ProductoRepository productoRepository) {
-        super(productoRepository); // Pasamos ProductoRepository al constructor de BaseServiceImpl
+        super(productoRepository);
         this.productoRepository = productoRepository;
     }
 
@@ -30,7 +30,7 @@ public class ProductoServiceImpl extends BaseServiceImpl<Producto, Long> impleme
 
     @Override
     public List<Producto> findBySubcategoriaNombre(String nombreSubcategoria) {
-        // Implementación del método para buscar productos por nombre de subcategoría
+
         return productoRepository.findBySubcategoriaNombreIgnoreCase(nombreSubcategoria);
     }
 }

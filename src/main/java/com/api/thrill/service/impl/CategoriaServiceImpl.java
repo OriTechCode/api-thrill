@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 public class CategoriaServiceImpl extends BaseServiceImpl<Categoria, Long> implements CategoriaService {
 
     public CategoriaServiceImpl(CategoriaRepository categoriaRepository) {
-        super(categoriaRepository); // Pasamos el repositorio al constructor de BaseServiceImpl
+        super(categoriaRepository);
     }
 }

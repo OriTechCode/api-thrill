@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface SubCategoriaRepository extends JpaRepository<SubCategoria, Long> {
-    List<SubCategoria> findByCategoriaId(Long categoriaId); // Query personalizada para filtrar por categoría
+    List<SubCategoria> findByCategoriaId(Long categoriaId);
 }

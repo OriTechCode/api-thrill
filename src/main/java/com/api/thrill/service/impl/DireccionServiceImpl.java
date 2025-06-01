@@ -13,13 +13,13 @@ public class DireccionServiceImpl extends BaseServiceImpl<Direccion, Long> imple
     private final DireccionRepository direccionRepository; // Inyectamos el repositorio
 
     public DireccionServiceImpl(DireccionRepository direccionRepository) {
-        super(direccionRepository); // Pasamos el repositorio genérico al constructor de BaseServiceImpl
+        super(direccionRepository);
         this.direccionRepository = direccionRepository;
     }
 
     @Override
     public List<Direccion> findByUsuarioId(Long usuarioId) {
-        // Lógica específica que utiliza el repositorio
+
         return direccionRepository.findByUsuarioId(usuarioId);
     }
 }

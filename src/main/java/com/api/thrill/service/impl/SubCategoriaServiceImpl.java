@@ -13,13 +13,13 @@ public class SubCategoriaServiceImpl extends BaseServiceImpl<SubCategoria, Long>
     private final SubCategoriaRepository subCategoriaRepository;
 
     public SubCategoriaServiceImpl(SubCategoriaRepository subCategoriaRepository) {
-        super(subCategoriaRepository); // Pasamos el repositorio genérico al constructor del BaseServiceImpl
+        super(subCategoriaRepository);
         this.subCategoriaRepository = subCategoriaRepository;
     }
 
     @Override
     public List<SubCategoria> findByCategoriaId(Long categoriaId) {
-        // Lógica específica que utiliza el repositorio para buscar por ID de categoría
+
         return subCategoriaRepository.findByCategoriaId(categoriaId);
     }
 }
