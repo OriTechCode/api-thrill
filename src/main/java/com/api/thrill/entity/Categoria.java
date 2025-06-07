@@ -18,7 +18,7 @@ public class Categoria extends Base {
     private String nombre;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
-    @JsonManagedReference // Señala la parte "gestora" de la relación (se serializa)
+    @JsonManagedReference(value = "Categoria_SubCategoria")
     private List<SubCategoria> subcategorias;
 
 }

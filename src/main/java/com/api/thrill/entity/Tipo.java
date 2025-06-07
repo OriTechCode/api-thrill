@@ -21,7 +21,7 @@ public class Tipo extends Base {
     private String nombre;
 
     @OneToMany(mappedBy = "tipo")
-    @JsonManagedReference
+    @JsonManagedReference(value = "Tipo-Talle")
     private List<Talle> talles;
 
 }

@@ -19,6 +19,6 @@ public class Direccion extends Base {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    @JsonBackReference // Indica que esta referencia no debe ser serializada en JSON
+    @JsonBackReference(value = "Usuario_Direccion")
     private Usuario usuario;
 }

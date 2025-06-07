@@ -23,9 +23,5 @@ public class TalleServiceImpl extends BaseServiceImpl<Talle, Long> implements Ta
         return talleRepository.findByTipoId(tipoId);
     }
 
-    @Override
-    public List<Talle> findByProductoId(Long productoId) {
 
-        return talleRepository.findByProductoId(productoId);
-    }
 }

@@ -19,7 +19,7 @@ public class DetalleOrden extends Base  {
     @JoinColumn(name = "producto_id")
     private Producto producto;
 
-    @ManyToOne
+    @ManyToOne(optional = true) // Permitir que la relación sea opcional
     @JoinColumn(name = "orden_id")
     private OrdenCompra orden;
 }

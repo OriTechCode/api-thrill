@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,12 +19,12 @@ public class Talle extends Base {
 
     private String talle;
 
-    @ManyToOne
-    @JsonBackReference
-    private Producto producto;
+    @OneToMany(mappedBy = "talle", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductoTalle> productoTalles = new ArrayList<>();
+
 
 //a nivel normalizacion esta mal , a nivel practica nos conviene
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "Tipo-Talle")
     private Tipo tipo;
 }

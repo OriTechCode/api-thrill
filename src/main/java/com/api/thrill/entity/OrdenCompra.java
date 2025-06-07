@@ -40,4 +40,6 @@ public class OrdenCompra extends Base {
 
     @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL)
     private List<DetalleOrden> detalles;
+
+
 }

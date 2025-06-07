@@ -38,7 +38,7 @@ public class Usuario extends Base implements UserDetails {
     private List<OrdenCompra> ordenes;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference // indica que esta entidad es la que trae a la otra
+    @JsonManagedReference(value = "Usuario_Direccion")
     private List<Direccion> direcciones;
 
     @Override

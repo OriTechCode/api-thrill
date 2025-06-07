@@ -1,5 +1,6 @@
 package com.api.thrill.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,17 +36,11 @@ public class Producto extends Base {
     private Tipo tipo;
 
     @OneToMany(mappedBy = "producto")
+    @JsonIgnoreProperties("producto")
     private List<DetalleOrden> detalles;
 
-// esto no deberia ser un one to many ?
-    @OneToMany
-    @JoinTable(
-            name = "talle_producto",
-            joinColumns = @JoinColumn(name = "id_producto"),
-            inverseJoinColumns = @JoinColumn(name = "id_talle")
-    )
-    @JsonManagedReference
-    private List<Talle> talles;
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductoTalle> productoTalles = new ArrayList<>();
 
     @ManyToMany  // en efecto, esta hecha como los dioses, dea
     @JoinTable(

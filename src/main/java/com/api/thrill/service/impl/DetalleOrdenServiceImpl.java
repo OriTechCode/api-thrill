@@ -27,20 +27,27 @@ public class DetalleOrdenServiceImpl implements DetalleOrdenService {
 
     @Override
     public DetalleOrden save(DetalleOrden detalleOrden) {
+        // Validar relación opcional con OrdenCompra
+        if (detalleOrden.getOrden() != null) {
+            detalleOrden.getOrden().getDetalles().add(detalleOrden);
+        }
         return detalleOrdenRepository.save(detalleOrden);
     }
 
     @Override
     public void deleteById(Long id) {
+        if (!detalleOrdenRepository.existsById(id)) {
+            throw new RuntimeException("Detalle de orden no encontrado con ID: " + id);
+        }
         detalleOrdenRepository.deleteById(id);
     }
 
     @Override
     public DetalleOrden update(Long id, DetalleOrden detalleOrden) {
-        if (detalleOrdenRepository.existsById(id)) {
-            detalleOrden.setId(id);
-            return detalleOrdenRepository.save(detalleOrden);
+        if (!detalleOrdenRepository.existsById(id)) {
+            throw new RuntimeException("Detalle de orden no encontrado con ID: " + id);
         }
-        throw new RuntimeException("Detalle de orden no encontrado con id: " + id);
+        detalleOrden.setId(id);
+        return detalleOrdenRepository.save(detalleOrden);
     }
 }

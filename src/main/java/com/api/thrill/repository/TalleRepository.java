@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface TalleRepository extends JpaRepository<Talle, Long> {
     List<Talle> findByTipoId(Long tipoId);
-    List<Talle> findByProductoId(Long productoId);
+
 
 }

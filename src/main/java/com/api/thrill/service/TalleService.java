@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface TalleService extends BaseService<Talle, Long> {
     List<Talle> findByTipoId(Long tipoId);
-    List<Talle> findByProductoId(Long productoId);
 }

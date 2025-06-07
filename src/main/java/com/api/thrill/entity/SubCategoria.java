@@ -19,7 +19,7 @@ public class SubCategoria extends Base {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
-    @JsonBackReference
+    @JsonBackReference(value = "Categoria_SubCategoria")
     private Categoria categoria;
 
     @OneToMany(mappedBy = "subcategoria", cascade = CascadeType.ALL)

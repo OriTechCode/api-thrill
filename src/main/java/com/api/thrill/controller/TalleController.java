@@ -24,9 +24,5 @@ public class TalleController extends BaseController<Talle, Long> {
         return ResponseEntity.ok(talleService.findByTipoId(tipoId));
     }
 
-    @GetMapping("/producto/{productoId}")
-    public ResponseEntity<List<Talle>> findByProductoId(@PathVariable Long productoId) {
 
-        return ResponseEntity.ok(talleService.findByProductoId(productoId));
-    }
 }
