@@ -34,7 +34,21 @@ public class SecurityConfig {
                                         "/v3/api-docs/**",   // Documentación OpenAPI
                                         "/swagger-ui/**",    // Recursos de Swagger UI
                                         "/swagger-ui.html",  // Interfaz gráfica de Swagger
-                                        "/api/auth/**"       // Rutas públicas de autenticación
+                                        "/api/auth/**" ,      // Rutas públicas de autenticación
+
+                                        "/api/productos/**",   // ← rutas públicas GET
+                                        "/api/imagenes/**",
+                                        "/api/categorias/**",
+                                        "/api/usuarios/**",
+                                        "/api/tipos/**",
+                                        "/api/talles/**",
+                                        "/api/subcategorias/**",
+                                        "/api/producto-talle/**",
+                                        "/api/pagos/**",
+                                        "/api/direcciones/**",
+                                        "/api/detalles-orden/**",
+                                        "/api/descuentos/**"
+                                        
                                 ).permitAll() // Permitir acceso público a estas rutas
                                 .anyRequest().authenticated() // Requiere autenticación para el resto
                 )
