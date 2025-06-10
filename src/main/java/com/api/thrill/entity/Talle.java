@@ -1,6 +1,7 @@
 package com.api.thrill.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,6 +26,6 @@ public class Talle extends Base {
 
 //a nivel normalizacion esta mal , a nivel practica nos conviene
     @ManyToOne
-    @JsonBackReference(value = "Tipo-Talle")
+    @JsonIgnoreProperties("talles")
     private Tipo tipo;
 }
