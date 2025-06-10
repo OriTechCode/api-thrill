@@ -35,7 +35,7 @@ public class DireccionController extends BaseController<Direccion, Long> {
             throw new RuntimeException("El ID del usuario es obligatorio.");
         }
 
-        Usuario usuario = usuarioService.buscarPorId(direccion.getUsuario().getId())
+        Usuario usuario = usuarioService.findById(direccion.getUsuario().getId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + direccion.getUsuario().getId()));
 
         // Asignar el usuario a la dirección

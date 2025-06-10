@@ -2,6 +2,7 @@ package com.api.thrill.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +22,7 @@ public class Tipo extends Base {
     private String nombre;
 
     @OneToMany(mappedBy = "tipo")
-    @JsonManagedReference(value = "Tipo-Talle")
+    @JsonIgnoreProperties("tipo")
     private List<Talle> talles;
 
 }

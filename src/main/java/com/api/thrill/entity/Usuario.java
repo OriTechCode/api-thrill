@@ -1,5 +1,6 @@
 package com.api.thrill.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,7 +39,7 @@ public class Usuario extends Base implements UserDetails {
     private List<OrdenCompra> ordenes;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "Usuario_Direccion")
+    @JsonIgnoreProperties("usuario")
     private List<Direccion> direcciones;
 
     @Override

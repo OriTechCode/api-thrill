@@ -2,6 +2,7 @@ package com.api.thrill.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,10 +20,10 @@ public class SubCategoria extends Base {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
-    @JsonBackReference(value = "Categoria_SubCategoria")
+    @JsonIgnoreProperties("subcategorias")
     private Categoria categoria;
 
     @OneToMany(mappedBy = "subcategoria", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonIgnoreProperties("subcategoria")
     private List<Producto> productos;
 }

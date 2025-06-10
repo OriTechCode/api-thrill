@@ -1,5 +1,6 @@
 package com.api.thrill.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -19,6 +20,6 @@ public class Direccion extends Base {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    @JsonBackReference(value = "Usuario_Direccion")
+    @JsonIgnoreProperties("direcciones")
     private Usuario usuario;
 }
