@@ -1,5 +1,6 @@
 package com.api.thrill.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,7 +19,7 @@ public class Categoria extends Base {
     private String nombre;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "Categoria_SubCategoria")
+    @JsonIgnoreProperties("categoria")
     private List<SubCategoria> subcategorias;
 
 }
