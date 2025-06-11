@@ -36,7 +36,12 @@ public class Usuario extends Base implements UserDetails {
     private Imagen imagenPerfil;
 
     @OneToMany(mappedBy = "usuario")
+    @JsonIgnoreProperties("usuario")
     private List<OrdenCompra> ordenes;
+
+    @OneToMany(mappedBy = "usuario")
+    @JsonIgnoreProperties("detalles")
+    private List<DetalleOrden> detalles;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("usuario")
