@@ -1,5 +1,6 @@
 package com.api.thrill.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,8 +17,9 @@ public class DetalleOrden extends Base  {
     private double precio;
 
     @ManyToOne
-    @JoinColumn(name = "producto_id")
-    private Producto producto;
+    @JoinColumn(name = "producto-talle_id")
+    @JsonIgnoreProperties("detalles")
+    private ProductoTalle productoTalle;
 
     @ManyToOne(optional = true) // Permitir que la relación sea opcional
     @JoinColumn(name = "orden_id")

@@ -21,6 +21,7 @@ public class Talle extends Base {
     private String talle;
 
     @OneToMany(mappedBy = "talle", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("talle")
     private List<ProductoTalle> productoTalles = new ArrayList<>();
 
 

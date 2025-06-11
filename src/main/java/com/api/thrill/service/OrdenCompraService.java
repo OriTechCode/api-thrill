@@ -2,13 +2,18 @@ package com.api.thrill.service;
 
 import com.api.thrill.entity.OrdenCompra;
 import com.api.thrill.entity.enums.EstadoOrden;
+import com.api.thrill.repository.OrdenCompraRepository;
+import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.preference.*;
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
+import com.mercadopago.client.preference.PreferenceClient;
+import com.mercadopago.client.preference.PreferenceItemRequest;
+import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
-import com.api.thrill.repository.OrdenCompraRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,6 +26,10 @@ import java.util.Optional;
 public class OrdenCompraService {
 
     private final OrdenCompraRepository ordenCompraRepository;
+    @Value("${mercadopago.access.token}")
+    private String mercadoPagoAccessToken;
+
+
 
     @Getter
     private String ultimoInitPoint;
@@ -75,28 +84,33 @@ public class OrdenCompraService {
     }
 
     public PreferenceRequest construirPreferencia(OrdenCompra orden) {
+
+        // Lista de ítems a comprar (productos en el carrito)
         List<PreferenceItemRequest> items = new ArrayList<>();
+
         orden.getDetalles().forEach(detalle -> {
             items.add(PreferenceItemRequest.builder()
-                    .id(detalle.getProducto().getId().toString())
-                    .title(detalle.getProducto().getNombre())
-                    .description(detalle.getProducto().getDescripcion())
-                    .unitPrice(BigDecimal.valueOf(detalle.getPrecio()))
-                    .quantity(detalle.getCantidad())
+                    .id(detalle.getProductoTalle().getId().toString()) // ID del producto (interno)
+                    .title(detalle.getProductoTalle().getProducto().getNombre()) // Nombre visible del producto
+                    .description(detalle.getProductoTalle().getProducto().getDescripcion()) // Descripción visible
+                    .unitPrice(BigDecimal.valueOf(detalle.getPrecio())) // Precio unitario
+                    .quantity(detalle.getCantidad()) // Cantidad
+                    .currencyId("ARS") // Código de moneda ISO (ej: USD, ARS, BRL)
                     .build());
         });
-
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success("https://localhost/success")
-                .failure("https://localhost/failure")
-                .pending("https://localhost/pending")
+                .success("https://youtu.be/dQw4w9WgXcQ?si=-Axp2WQ3zUkxCQjc")
+                .failure("https://www.youtube.com/watch?v=lOg-0rEkWjw")
+                .pending("https://www.youtube.com/watch?v=lOg-0rEkWjw")
                 .build();
-
+        // Construcción final de la preferencia
         return PreferenceRequest.builder()
                 .items(items)
                 .backUrls(backUrls)
-                .autoReturn("approved")
-                .externalReference(String.valueOf(orden.getId())) // Referencia a la orden
+                .autoReturn("approved") // Redirige automáticamente si el pago es aprobado
+                .externalReference(String.valueOf(orden.getId())) // ID de la orden como referencia cruzada
+                .notificationUrl("https://2ec8-38-51-31-185.ngrok-free.app/api/pagos/webhook") // 👈 Webhook para actualizaciones
                 .build();
     }
+
 }
