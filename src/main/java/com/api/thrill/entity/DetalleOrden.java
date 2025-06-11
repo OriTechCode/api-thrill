@@ -17,6 +17,11 @@ public class DetalleOrden extends Base  {
     private double precio;
 
     @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonIgnoreProperties("detalles")
+    private Usuario usuario;
+
+    @ManyToOne
     @JoinColumn(name = "producto-talle_id")
     @JsonIgnoreProperties("detalles")
     private ProductoTalle productoTalle;
