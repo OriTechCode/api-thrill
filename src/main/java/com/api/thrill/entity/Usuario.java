@@ -40,7 +40,7 @@ public class Usuario extends Base implements UserDetails {
     private List<OrdenCompra> ordenes;
 
     @OneToMany(mappedBy = "usuario")
-    @JsonIgnoreProperties("detalles")
+    @JsonIgnoreProperties("usuario")
     private List<DetalleOrden> detalles;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
