@@ -38,7 +38,7 @@ public class AuthService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .rol(request.getRol())
+                .rol("USER")
                 .imagenPerfil(null)
                 .ordenes(new ArrayList<>())
                 .direcciones(new ArrayList<>())
