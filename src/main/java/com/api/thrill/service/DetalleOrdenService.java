@@ -10,4 +10,7 @@ public interface DetalleOrdenService {
     DetalleOrden save(DetalleOrden detalleOrden);
     void deleteById(Long id);
     DetalleOrden update(Long id, DetalleOrden detalleOrden);
+
+    // Nuevo método
+    void deleteByUsuarioId(Long usuarioId);
 }

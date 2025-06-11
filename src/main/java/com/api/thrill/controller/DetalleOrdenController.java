@@ -57,4 +57,17 @@ public class DetalleOrdenController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Detalle de Orden no encontrado.");
         }
     }
+
+
+    @DeleteMapping("/usuario/{usuarioId}")
+    public ResponseEntity<?> deleteByUsuarioId(@PathVariable Long usuarioId) {
+        try {
+            detalleOrdenService.deleteByUsuarioId(usuarioId);
+            return ResponseEntity.ok("Todos los detalles del usuario con ID " + usuarioId + " han sido marcados como eliminados.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("No se pudieron eliminar los detalles: " + e.getMessage());
+        }
+    }
+
+
 }

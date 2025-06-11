@@ -66,7 +66,7 @@ public class PagoController {
     /**
      * Consultar todas las órdenes.
      */
-    @GetMapping("/ordenes")
+    @GetMapping("")
     public ResponseEntity<?> listarOrdenes() {
         List<OrdenCompra> ordenes = ordenCompraService.listarOrdenes();
         return ResponseEntity.ok(ordenes);

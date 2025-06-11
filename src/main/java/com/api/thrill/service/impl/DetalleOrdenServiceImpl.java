@@ -17,29 +17,34 @@ public class DetalleOrdenServiceImpl implements DetalleOrdenService {
 
     @Override
     public List<DetalleOrden> findAll() {
-        return detalleOrdenRepository.findAll();
+        // Solo devolver detalles no eliminados
+        return detalleOrdenRepository.findAll().stream().filter(detalle -> !detalle.getEliminado()).toList();
     }
 
     @Override
     public Optional<DetalleOrden> findById(Long id) {
-        return detalleOrdenRepository.findById(id);
+        return detalleOrdenRepository.findById(id)
+                .filter(detalle -> !detalle.getEliminado()); // Opcionalmente, excluimos los eliminados
     }
 
     @Override
     public DetalleOrden save(DetalleOrden detalleOrden) {
-        // Validar relación opcional con OrdenCompra
         if (detalleOrden.getOrden() != null) {
             detalleOrden.getOrden().getDetalles().add(detalleOrden);
         }
+        detalleOrden.setEliminado(false); // Asegurarnos que al guardar nuevos detalles, no estén eliminados
         return detalleOrdenRepository.save(detalleOrden);
     }
 
     @Override
     public void deleteById(Long id) {
-        if (!detalleOrdenRepository.existsById(id)) {
-            throw new RuntimeException("Detalle de orden no encontrado con ID: " + id);
+        Optional<DetalleOrden> detalle = detalleOrdenRepository.findById(id);
+        if (detalle.isEmpty() || detalle.get().getEliminado()) {
+            throw new RuntimeException("Detalle de orden no encontrado o ya eliminado con ID: " + id);
         }
-        detalleOrdenRepository.deleteById(id);
+        DetalleOrden detalleOrden = detalle.get();
+        detalleOrden.setEliminado(true); // Actualizar el estado eliminado
+        detalleOrdenRepository.save(detalleOrden); // Guardar estado actualizado
     }
 
     @Override
@@ -49,5 +54,10 @@ public class DetalleOrdenServiceImpl implements DetalleOrdenService {
         }
         detalleOrden.setId(id);
         return detalleOrdenRepository.save(detalleOrden);
+    }
+
+    @Override
+    public void deleteByUsuarioId(Long usuarioId) {
+        detalleOrdenRepository.logicalDeleteByUsuarioId(usuarioId);
     }
 }
