@@ -77,6 +77,8 @@ public class PagoController {
      */
     @PostMapping("/webhook")
     public ResponseEntity<String> procesarWebhook(@RequestBody Map<String, Object> body) {
+        MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
+
         try {
             if (body != null && body.containsKey("type") && body.containsKey("data")) {
                 String type = body.get("type").toString();

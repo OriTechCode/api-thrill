@@ -18,7 +18,6 @@ import java.util.List;
 public class Producto extends Base {
 
     private String nombre;
-    private int cantidad;
     private double precio;
     private String descripcion;
     private String color;
@@ -33,13 +32,12 @@ public class Producto extends Base {
 
     //esto es redundante por parte de la normalizacion , pero es practico para nosotros
     @ManyToOne
+    @JsonIgnoreProperties("talles")
     private Tipo tipo;
 
-    @OneToMany(mappedBy = "producto")
-    @JsonIgnoreProperties("producto")
-    private List<DetalleOrden> detalles;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("producto")
     private List<ProductoTalle> productoTalles = new ArrayList<>();
 
     @ManyToMany  // en efecto, esta hecha como los dioses, dea

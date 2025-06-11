@@ -22,7 +22,7 @@ public class Tipo extends Base {
     private String nombre;
 
     @OneToMany(mappedBy = "tipo")
-    @JsonIgnoreProperties("tipo")
+    @JsonIgnoreProperties({"tipo", "productoTalles"})
     private List<Talle> talles;
 
 }
