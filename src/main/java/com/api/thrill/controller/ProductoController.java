@@ -18,7 +18,6 @@ public class ProductoController extends BaseController<Producto, Long> {
         this.productoService = productoService;
     }
 
-
     @GetMapping("/buscar/nombre")
     public ResponseEntity<List<Producto>> buscarPorNombre(@RequestParam String nombre) {
         return ResponseEntity.ok(productoService.findByNombre(nombre));
@@ -29,9 +28,18 @@ public class ProductoController extends BaseController<Producto, Long> {
         return ResponseEntity.ok(productoService.findByMarca(marca));
     }
 
-    @GetMapping("/buscar/subcategoria")
-    public ResponseEntity<List<Producto>> buscarPorSubcategoria(@RequestParam String nombreSubcategoria) {
 
-        return ResponseEntity.ok(productoService.findBySubcategoriaNombre(nombreSubcategoria));
+
+    @GetMapping("/buscar/tipo")
+    public ResponseEntity<List<Producto>> buscarPorTipo(@RequestParam String nombreTipo) {
+        return ResponseEntity.ok(productoService.findByTipo(nombreTipo));
+    }
+
+    // Nuevo endpoint para filtrar por categoría y/o talle
+    @GetMapping("/buscar/categoria-talle")
+    public ResponseEntity<List<Producto>> buscarPorCategoriaYTalle(
+            @RequestParam(required = false) String nombreCategoria,
+            @RequestParam(required = false) String talle) {
+        return ResponseEntity.ok(productoService.findByCategoriaAndTalle(nombreCategoria, talle));
     }
 }

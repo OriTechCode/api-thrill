@@ -28,9 +28,14 @@ public class ProductoServiceImpl extends BaseServiceImpl<Producto, Long> impleme
     }
 
 
-    @Override
-    public List<Producto> findBySubcategoriaNombre(String nombreSubcategoria) {
 
-        return productoRepository.findBySubcategoriaNombreIgnoreCase(nombreSubcategoria);
+    @Override
+    public List<Producto> findByTipo(String nombreTipo) { 
+        return productoRepository.findByTipoNombreIgnoreCase(nombreTipo);
+    }
+
+    @Override
+    public List<Producto> findByCategoriaAndTalle(String nombreCategoria, String talle) {
+        return productoRepository.findByCategoriaAndTalle(nombreCategoria, talle);
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "productos")
 public class Producto extends Base {
 
@@ -26,9 +27,13 @@ public class Producto extends Base {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Imagen> imagenes = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "subcategoria_id")
-    private SubCategoria subcategoria;
+    @ManyToMany()
+    @JoinTable(
+            name = "categoria-producto",
+            joinColumns = @JoinColumn(name = "id_producto"),
+            inverseJoinColumns = @JoinColumn(name = "id_categoria")
+    )
+    private List<Categoria> categorias;
 
     //esto es redundante por parte de la normalizacion , pero es practico para nosotros
     @ManyToOne
@@ -37,7 +42,7 @@ public class Producto extends Base {
 
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("producto")
+    @JsonIgnoreProperties({"producto", "detalles"})
     private List<ProductoTalle> productoTalles = new ArrayList<>();
 
     @ManyToMany  // en efecto, esta hecha como los dioses, dea

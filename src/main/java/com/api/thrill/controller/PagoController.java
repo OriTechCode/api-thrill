@@ -19,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/pagos")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+
 public class PagoController {
     private final OrdenCompraService ordenCompraService;
     @Value("${mercadopago.access.token}")

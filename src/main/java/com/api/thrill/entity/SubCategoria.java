@@ -23,7 +23,7 @@ public class SubCategoria extends Base {
     @JsonIgnoreProperties("subcategorias")
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "subcategoria", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("subcategoria")
-    private List<Producto> productos;
+  //  @OneToMany(mappedBy = "subcategoria", cascade = CascadeType.ALL)
+  //  @JsonIgnoreProperties("subcategoria")
+  //  private List<Producto> productos;
 }

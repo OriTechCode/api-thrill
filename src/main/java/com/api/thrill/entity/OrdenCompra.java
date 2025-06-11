@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "ordenes")
 public class OrdenCompra extends Base {
 
@@ -42,7 +43,7 @@ public class OrdenCompra extends Base {
 
 
     @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL)
-    //@JsonIgnoreProperties("orden")
+    @JsonIgnoreProperties("orden")
     private List<DetalleOrden> detalles;
 
 

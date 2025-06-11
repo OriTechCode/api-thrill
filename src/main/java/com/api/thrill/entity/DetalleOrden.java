@@ -3,6 +3,7 @@ package com.api.thrill.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor
@@ -10,6 +11,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@Where(clause = "eliminado = false")
 @Table(name = "detalles")
 public class DetalleOrden extends Base  {
 

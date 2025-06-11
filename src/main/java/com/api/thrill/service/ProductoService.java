@@ -8,7 +8,8 @@ public interface ProductoService extends BaseService<Producto, Long> {
     List<Producto> findByNombre(String nombre);
     List<Producto> findByMarca(String marca);
 
+    List<Producto> findByTipo(String nombreTipo);
 
-
-    List<Producto> findBySubcategoriaNombre(String nombreSubcategoria);
+    // Nuevo método
+    List<Producto> findByCategoriaAndTalle(String nombreCategoria, String talle);
 }

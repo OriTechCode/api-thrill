@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductoTalle extends Base {
 
 
@@ -30,7 +31,7 @@ public class ProductoTalle extends Base {
     private Talle talle;
 
     @OneToMany(mappedBy = "productoTalle")
-    @JsonIgnoreProperties("productoTalle")
+    @JsonIgnoreProperties({"productoTalle", "detalles"})
     private List<DetalleOrden> detalles;
 
 

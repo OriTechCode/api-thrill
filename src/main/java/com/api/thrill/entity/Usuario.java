@@ -17,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "email"}))
 public class Usuario extends Base implements UserDetails {
 

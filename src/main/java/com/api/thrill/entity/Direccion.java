@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Getter
 @Setter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "direcciones")
 public class Direccion extends Base {
 

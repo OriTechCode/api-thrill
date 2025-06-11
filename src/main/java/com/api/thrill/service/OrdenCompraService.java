@@ -3,6 +3,7 @@ package com.api.thrill.service;
 import com.api.thrill.entity.OrdenCompra;
 import com.api.thrill.entity.enums.EstadoOrden;
 import com.api.thrill.repository.OrdenCompraRepository;
+import com.api.thrill.repository.ProductoTalleRepository;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
@@ -29,8 +30,10 @@ public class OrdenCompraService {
     @Value("${mercadopago.access.token}")
     private String mercadoPagoAccessToken;
 
-
-
+    private final ProductoTalleRepository productoTalleRepository;
+    @Getter
+    private String mercadoPagoPublicKey;
+    DetalleOrdenService detalleOrdenService;
     @Getter
     private String ultimoInitPoint;
 
@@ -73,7 +76,15 @@ public class OrdenCompraService {
                     .orElseThrow(() -> new Exception("Orden no encontrada"));
 
             switch (payment.getStatus()) {
-                case "approved" -> orden.setEstadoOrden(EstadoOrden.PAGADO.toString());
+                case "approved" -> {
+                    orden.setEstadoOrden(EstadoOrden.PAGADO.toString());
+
+                    // 🔥 Obtener usuario y limpiar carrito
+                    if (orden.getUsuario() != null) {
+                        Long usuarioId = orden.getUsuario().getId();
+                        detalleOrdenService.deleteByUsuarioId(usuarioId);
+                    }
+                }
                 case "pending" -> orden.setEstadoOrden(EstadoOrden.PENDIENTE.toString());
                 case "rejected" -> orden.setEstadoOrden(EstadoOrden.CANCELADO.toString());
                 default -> orden.setEstadoOrden(EstadoOrden.PENDIENTE.toString());
@@ -84,33 +95,54 @@ public class OrdenCompraService {
     }
 
     public PreferenceRequest construirPreferencia(OrdenCompra orden) {
-
-        // Lista de ítems a comprar (productos en el carrito)
         List<PreferenceItemRequest> items = new ArrayList<>();
 
-        orden.getDetalles().forEach(detalle -> {
+        for (var detalle : orden.getDetalles()) {
+            // Validar datos mínimos
+            if (detalle.getCantidad() <= 0 || detalle.getPrecio() <= 0) {
+                throw new IllegalArgumentException("La cantidad y el precio deben ser mayores a cero.");
+            }
+
+            // 🧠 Cargar el productoTalle desde la BD usando su ID
+            Long ptId = detalle.getProductoTalle().getId();
+            var productoTalle = productoTalleRepository.findById(ptId)
+                    .orElseThrow(() -> new IllegalArgumentException("ProductoTalle no encontrado con ID: " + ptId));
+
+            var producto = productoTalle.getProducto();
+
+            if (producto.getNombre() == null || producto.getDescripcion() == null) {
+                throw new IllegalArgumentException("El producto debe tener nombre y descripción completos.");
+            }
+
+            // Agregar ítem a la preferencia
             items.add(PreferenceItemRequest.builder()
-                    .id(detalle.getProductoTalle().getId().toString()) // ID del producto (interno)
-                    .title(detalle.getProductoTalle().getProducto().getNombre()) // Nombre visible del producto
-                    .description(detalle.getProductoTalle().getProducto().getDescripcion()) // Descripción visible
-                    .unitPrice(BigDecimal.valueOf(detalle.getPrecio())) // Precio unitario
-                    .quantity(detalle.getCantidad()) // Cantidad
-                    .currencyId("ARS") // Código de moneda ISO (ej: USD, ARS, BRL)
+                    .id(productoTalle.getId().toString())
+                    .title(producto.getNombre())
+                    .description(producto.getDescripcion())
+                    .unitPrice(BigDecimal.valueOf(detalle.getPrecio()))
+                    .quantity(detalle.getCantidad())
+                    .currencyId("ARS")
                     .build());
-        });
+        }
+
+        // URLs de redirección post-pago
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
                 .success("https://youtu.be/dQw4w9WgXcQ?si=-Axp2WQ3zUkxCQjc")
                 .failure("https://www.youtube.com/watch?v=lOg-0rEkWjw")
                 .pending("https://www.youtube.com/watch?v=lOg-0rEkWjw")
                 .build();
+
+
+
         // Construcción final de la preferencia
         return PreferenceRequest.builder()
                 .items(items)
                 .backUrls(backUrls)
-                .autoReturn("approved") // Redirige automáticamente si el pago es aprobado
-                .externalReference(String.valueOf(orden.getId())) // ID de la orden como referencia cruzada
-                .notificationUrl("https://2ec8-38-51-31-185.ngrok-free.app/api/pagos/webhook") // 👈 Webhook para actualizaciones
+                .autoReturn("approved")
+                .externalReference(String.valueOf(orden.getId()))
+                .notificationUrl("https://2ec8-38-51-31-185.ngrok-free.app/api/pagos/webhook")
                 .build();
     }
+
 
 }
