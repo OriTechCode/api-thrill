@@ -21,6 +21,7 @@ public class Producto extends Base {
     private String nombre;
     private double precio;
     private String descripcion;
+    private int cantidad= 0;
     private String color;
     private String marca;
 
