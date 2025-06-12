@@ -28,4 +28,7 @@ public class UsuarioServiceImpl extends BaseServiceImpl<Usuario, Long> implement
     public boolean existePorEmail(String email) {
         return usuarioRepository.existsByEmail(email);
     }
+
+    public static class Userdetailsimp {
+    }
 }

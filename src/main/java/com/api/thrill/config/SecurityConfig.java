@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,34 +28,35 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors() // <--- habilita CORS
+                .and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers(
-                                        "/v3/api-docs/**",   // Documentación OpenAPI
-                                        "/swagger-ui/**",    // Recursos de Swagger UI
-                                        "/swagger-ui.html",  // Interfaz gráfica de Swagger
-                                        "/api/auth/**" ,      // Rutas públicas de autenticación
+                                // 🛑 POST que se permiten sin ser ADMIN
+                                .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/usuarios/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/pagos/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.POST, "/api/ordenes/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.POST, "/api/direcciones/**").hasAnyRole("ADMIN", "USER")
 
-                                        "/api/productos/**",   // ← rutas públicas GET
-                                        "/api/imagenes/**",
-                                        "/api/categorias/**",
-                                        "/api/usuarios/**",
-                                        "/api/tipos/**",
-                                        "/api/talles/**",
-                                        "/api/subcategorias/**",
-                                        "/api/producto-talle/**",
-                                        "/api/pagos/**",
-                                        "/api/direcciones/**",
-                                        "/api/detalles-orden/**",
-                                        "/api/descuentos/**"
-                                        
-                                ).permitAll() // Permitir acceso público a estas rutas
-                                .anyRequest().authenticated() // Requiere autenticación para el resto
+                                // ✅ GET públicos para todos los endpoints excepto usuarios
+                                .requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+
+                                // 🛡️ Cualquier otro POST, PUT o DELETE requiere ser ADMIN
+                                .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
+
+                                // 🧾 Swagger y documentación públicas
+                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+                                // 🔒 Todo lo demás requiere estar autenticado
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
-                        sessionManager
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

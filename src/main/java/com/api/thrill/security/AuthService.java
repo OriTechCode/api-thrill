@@ -20,14 +20,19 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class AuthService {
     private final UsuarioRepository usuarioRepository;
-    private final JwtService jwtservice;
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails usuario = usuarioRepository.findByUsername(request.getUsername()).orElseThrow();
-        String token = jwtservice.getToken(usuario);
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+
+        Usuario usuario = usuarioRepository.findByUsername(request.getUsername()).orElseThrow();
+
+        // IMPORTANTE: usamos generateToken para incluir el rol en el JWT
+        String token = jwtService.generateToken(usuario);
+
         return AuthResponse.builder()
                 .token(token)
                 .build();
@@ -38,14 +43,19 @@ public class AuthService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .rol("USER")
+                .rol("USER") // Rol por defecto
                 .imagenPerfil(null)
                 .ordenes(new ArrayList<>())
                 .direcciones(new ArrayList<>())
                 .build();
+
         usuarioRepository.save(usuario);
+
+        // También aquí usamos generateToken para que el rol se guarde en el token
+        String token = jwtService.generateToken(usuario);
+
         return AuthResponse.builder()
-                .token(jwtservice.getToken(usuario))
+                .token(token)
                 .build();
     }
 
