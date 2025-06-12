@@ -29,6 +29,5 @@ public class UsuarioServiceImpl extends BaseServiceImpl<Usuario, Long> implement
         return usuarioRepository.existsByEmail(email);
     }
 
-    public static class Userdetailsimp {
-    }
+
 }
