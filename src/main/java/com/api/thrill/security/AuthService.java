@@ -1,9 +1,9 @@
 package com.api.thrill.security;
 
-
 import com.api.thrill.dto.AuthResponse;
 import com.api.thrill.dto.LoginRequest;
 import com.api.thrill.dto.RegisterRequest;
+import com.api.thrill.dto.UsuarioDTO;
 import com.api.thrill.entity.Usuario;
 import com.api.thrill.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +24,28 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    private UsuarioDTO convertToDTO(Usuario usuario) {
+        return UsuarioDTO.builder()
+                .id(usuario.getId())
+                .username(usuario.getUsername())
+                .email(usuario.getEmail())
+                .rol(usuario.getRol())
+                .imagenPerfil(usuario.getImagenPerfil())
+                .direcciones(usuario.getDirecciones())
+                .eliminado(usuario.getEliminado())
+                .build();
+    }
+
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
         Usuario usuario = usuarioRepository.findByUsername(request.getUsername()).orElseThrow();
-
-        // IMPORTANTE: usamos generateToken para incluir el rol en el JWT
         String token = jwtService.generateToken(usuario);
 
         return AuthResponse.builder()
                 .token(token)
+                .usuario(convertToDTO(usuario))
                 .build();
     }
 
@@ -43,20 +54,18 @@ public class AuthService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .rol("USER") // Rol por defecto
+                .rol("USER")
                 .imagenPerfil(null)
                 .ordenes(new ArrayList<>())
                 .direcciones(new ArrayList<>())
                 .build();
 
         usuarioRepository.save(usuario);
-
-        // También aquí usamos generateToken para que el rol se guarde en el token
         String token = jwtService.generateToken(usuario);
 
         return AuthResponse.builder()
                 .token(token)
+                .usuario(convertToDTO(usuario))
                 .build();
     }
-
 }
