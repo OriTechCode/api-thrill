@@ -31,7 +31,7 @@ public class OrdenCompra extends Base {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    @JsonIgnoreProperties("ordenes")
+    @JsonIgnoreProperties({"ordenes","detalles"})
     private Usuario usuario;
 
     @ManyToOne

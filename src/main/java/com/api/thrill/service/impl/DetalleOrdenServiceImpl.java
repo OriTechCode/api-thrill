@@ -30,9 +30,9 @@ public class DetalleOrdenServiceImpl implements DetalleOrdenService {
     @Override
     public DetalleOrden save(DetalleOrden detalleOrden) {
         if (detalleOrden.getOrden() != null) {
-            detalleOrden.getOrden().getDetalles().add(detalleOrden);
+            detalleOrden.getOrden().addDetalle(detalleOrden); // Asociamos el detalle con la orden
         }
-        detalleOrden.setEliminado(false); // Asegurarnos que al guardar nuevos detalles, no estén eliminados
+        detalleOrden.setEliminado(false); // Por defecto, el detalle no está marcado como eliminado
         return detalleOrdenRepository.save(detalleOrden);
     }
 

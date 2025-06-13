@@ -47,18 +47,28 @@ public class OrdenCompraService {
 
     public OrdenCompra crearOrden(OrdenCompra orden) throws Exception {
         orden.setEstadoOrden(EstadoOrden.PENDIENTE.toString());
-        
-        // Guardamos primero la orden
+
+        // Guardamos la orden inicialmente
         OrdenCompra ordenGuardada = ordenCompraRepository.save(orden);
-        
-        // Actualizamos los detalles existentes
+
+        // Crea una copia de la lista de detalles para evitar ConcurrentModificationException
+        List<DetalleOrden> detallesCopia = new ArrayList<>(orden.getDetalles());
+
+        // Iteramos sobre la copia mientras trabajamos con los detalles
         if (orden.getDetalles() != null) {
-            for (DetalleOrden detalle : orden.getDetalles()) {
-                Optional<DetalleOrden> detalleExistente = detalleOrdenService.findById(detalle.getId());
-                if (detalleExistente.isPresent()) {
-                    DetalleOrden detalleActual = detalleExistente.get();
-                    detalleActual.setOrden(ordenGuardada);
-                    detalleOrdenService.update(detalleActual.getId(), detalleActual);
+            for (DetalleOrden detalle : detallesCopia) {
+                if (detalle.getId() == null) {
+                    // Si no se envía un ID, creamos un nuevo DetalleOrden y lo asociamos a la orden
+                    detalle.setOrden(ordenGuardada);
+                    detalleOrdenService.save(detalle);
+                } else {
+                    // Si el id del detalle existe, lo actualizamos
+                    Optional<DetalleOrden> detalleExistente = detalleOrdenService.findById(detalle.getId());
+                    if (detalleExistente.isPresent()) {
+                        DetalleOrden detalleActual = detalleExistente.get();
+                        detalleActual.setOrden(ordenGuardada);
+                        detalleOrdenService.update(detalleActual.getId(), detalleActual);
+                    }
                 }
             }
         }

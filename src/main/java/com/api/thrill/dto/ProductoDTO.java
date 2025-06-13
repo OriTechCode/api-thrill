@@ -2,6 +2,7 @@ package com.api.thrill.dto;
 
 
 import com.api.thrill.entity.Categoria;
+import com.api.thrill.entity.Imagen;
 import com.api.thrill.entity.Tipo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
