@@ -160,7 +160,7 @@ public class OrdenCompraService {
                 .backUrls(backUrls)
                 .autoReturn("approved")
                 .externalReference(String.valueOf(orden.getId()))
-                .notificationUrl("https://2ec8-38-51-31-185.ngrok-free.app/api/pagos/webhook")
+                .notificationUrl("https://api-thrill-production.up.railway.app/api/pagos/webhook")
                 .build();
     }
 
