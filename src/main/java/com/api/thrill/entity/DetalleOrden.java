@@ -20,15 +20,16 @@ public class DetalleOrden extends Base  {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    @JsonIgnoreProperties("detalles")
+    @JsonIgnoreProperties({"detalles", "ordenes", "password"})
     private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "producto-talle_id")
-    @JsonIgnoreProperties("detalles")
+    @JsonIgnoreProperties({"detalles"})
     private ProductoTalle productoTalle;
 
     @ManyToOne(optional = true) // Permitir que la relación sea opcional
     @JoinColumn(name = "orden_id")
+    @JsonIgnoreProperties({"detalles"})
     private OrdenCompra orden;
 }

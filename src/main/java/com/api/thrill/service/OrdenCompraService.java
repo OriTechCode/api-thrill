@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.api.thrill.entity.DetalleOrden;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,27 +35,41 @@ public class OrdenCompraService {
     private final ProductoTalleRepository productoTalleRepository;
     @Getter
     private String mercadoPagoPublicKey;
-    DetalleOrdenService detalleOrdenService;
+
     @Getter
     private String ultimoInitPoint;
 
     /**
      * Crear una nueva orden y una preferencia en MercadoPago.
      */
+    @Autowired
+    private DetalleOrdenService detalleOrdenService;
+
     public OrdenCompra crearOrden(OrdenCompra orden) throws Exception {
         orden.setEstadoOrden(EstadoOrden.PENDIENTE.toString());
+        
+        // Guardamos primero la orden
+        OrdenCompra ordenGuardada = ordenCompraRepository.save(orden);
+        
+        // Actualizamos los detalles existentes
+        if (orden.getDetalles() != null) {
+            for (DetalleOrden detalle : orden.getDetalles()) {
+                Optional<DetalleOrden> detalleExistente = detalleOrdenService.findById(detalle.getId());
+                if (detalleExistente.isPresent()) {
+                    DetalleOrden detalleActual = detalleExistente.get();
+                    detalleActual.setOrden(ordenGuardada);
+                    detalleOrdenService.update(detalleActual.getId(), detalleActual);
+                }
+            }
+        }
 
         // Crear preferencia de MercadoPago
         PreferenceClient client = new PreferenceClient();
-        PreferenceRequest preferenceRequest = construirPreferencia(orden);
+        PreferenceRequest preferenceRequest = construirPreferencia(ordenGuardada);
         Preference preference = client.create(preferenceRequest);
         ultimoInitPoint = preference.getInitPoint();
 
-        orden.setEstadoOrden(EstadoOrden.PENDIENTE.toString());
-        orden.setMetodoPago("MERCADO_PAGO"); // Set método explícito
-        ordenCompraRepository.save(orden); // Guardar orden antes de retornar resultados
-
-        return orden;
+        return ordenGuardada;
     }
 
 
