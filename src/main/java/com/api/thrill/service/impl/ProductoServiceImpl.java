@@ -30,14 +30,11 @@ public class ProductoServiceImpl extends BaseServiceImpl<Producto, Long> impleme
         producto.setMarca(dto.getMarca());
         producto.setPrecio(dto.getPrecio());
 
-        // Verificar si el DTO incluye IDs de categorías antes de buscarlas
-        if (dto.getCategoriaIds() != null && !dto.getCategoriaIds().isEmpty()) {
-            List<Categoria> categorias = categoriaRepository.findAllById(dto.getCategoriaIds());
-            if (categorias.isEmpty()) {
-                throw new RuntimeException("Una o más categorías no se encontrarón");
-            }
-            producto.setCategorias(categorias);
+        // Asociar las categorías directamente
+        if (dto.getCategorias() != null && !dto.getCategorias().isEmpty()) {
+            producto.setCategorias(dto.getCategorias());
         }
+
 
         return productoRepository.save(producto);
     }
