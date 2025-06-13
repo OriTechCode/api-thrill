@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -27,6 +28,7 @@ public class Producto extends Base {
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Imagen> imagenes = new ArrayList<>();
+
 
     @ManyToMany()
     @JoinTable(
@@ -53,4 +55,14 @@ public class Producto extends Base {
             inverseJoinColumns = @JoinColumn(name = "id_descuento")
     )
     private List<Descuento> descuentos;
+
+    public List<Long> getCategoriaIds() {
+        if (categorias == null || categorias.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return categorias.stream()
+                .map(Categoria::getId)
+                .collect(Collectors.toList());
+    }
+
 }

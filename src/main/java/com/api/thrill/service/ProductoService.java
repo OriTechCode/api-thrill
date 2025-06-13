@@ -1,5 +1,6 @@
 package com.api.thrill.service;
 
+import com.api.thrill.dto.ProductoDTO;
 import com.api.thrill.entity.Producto;
 
 import java.util.List;
@@ -10,6 +11,9 @@ public interface ProductoService extends BaseService<Producto, Long> {
 
     List<Producto> findByTipo(String nombreTipo);
 
-    // Nuevo método
+    // filtro por categoria , talle o categoria y talle
     List<Producto> findByCategoriaAndTalle(String nombreCategoria, String talle);
+
+    Producto crearProductoDesdeDTO(ProductoDTO dto);
+
 }

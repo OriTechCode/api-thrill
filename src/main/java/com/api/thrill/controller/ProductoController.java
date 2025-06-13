@@ -1,9 +1,13 @@
 package com.api.thrill.controller;
 
+import com.api.thrill.dto.ProductoDTO;
+import com.api.thrill.entity.Imagen;
 import com.api.thrill.entity.Producto;
+import com.api.thrill.service.ImagenService;
 import com.api.thrill.service.ProductoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +22,25 @@ public class ProductoController extends BaseController<Producto, Long> {
         this.productoService = productoService;
     }
 
+    @PostMapping("/crear")
+    public ResponseEntity<?> crearProductoConImagenes(@RequestBody ProductoDTO request) {
+        Producto producto = new Producto();
+        producto.setNombre(request.getNombre());
+        producto.setMarca(request.getMarca());
+        producto.setCategorias(request.getCategorias());
+
+        List<Imagen> imagenes = request.getImagenesUrls().stream().map(url -> {
+            Imagen img = new Imagen();
+            img.setUrl(url);
+            img.setProducto(producto); // importante para mantener la relación
+            return img;
+        }).toList();
+
+        producto.setImagenes(imagenes);
+        Producto productoGuardado = productoService.save(producto);
+
+        return ResponseEntity.ok(productoGuardado);
+    }
     @GetMapping("/buscar/nombre")
     public ResponseEntity<List<Producto>> buscarPorNombre(@RequestParam String nombre) {
         return ResponseEntity.ok(productoService.findByNombre(nombre));
