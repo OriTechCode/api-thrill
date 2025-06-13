@@ -51,26 +51,24 @@ public class OrdenCompraService {
         // Guardamos la orden inicialmente
         OrdenCompra ordenGuardada = ordenCompraRepository.save(orden);
 
-        // Crea una copia de la lista de detalles para evitar ConcurrentModificationException
-        List<DetalleOrden> detallesCopia = new ArrayList<>(orden.getDetalles());
+        // Validamos si la orden tiene detalles
+        if (orden.getDetalles() != null && !orden.getDetalles().isEmpty()) {
+            // Evitamos duplicados creando una lista temporal
+            List<DetalleOrden> detallesUnicos = new ArrayList<>();
 
-        // Iteramos sobre la copia mientras trabajamos con los detalles
-        if (orden.getDetalles() != null) {
-            for (DetalleOrden detalle : detallesCopia) {
+            for (DetalleOrden detalle : orden.getDetalles()) {
                 if (detalle.getId() == null) {
-                    // Si no se envía un ID, creamos un nuevo DetalleOrden y lo asociamos a la orden
-                    detalle.setOrden(ordenGuardada);
-                    detalleOrdenService.save(detalle);
+                    detalle.setOrden(ordenGuardada); // Asociar el detalle a la orden
+                    DetalleOrden detalleGuardado = detalleOrdenService.save(detalle); // Guardar el detalle
+                    detallesUnicos.add(detalleGuardado);
                 } else {
-                    // Si el id del detalle existe, lo actualizamos
-                    Optional<DetalleOrden> detalleExistente = detalleOrdenService.findById(detalle.getId());
-                    if (detalleExistente.isPresent()) {
-                        DetalleOrden detalleActual = detalleExistente.get();
-                        detalleActual.setOrden(ordenGuardada);
-                        detalleOrdenService.update(detalleActual.getId(), detalleActual);
-                    }
+                    DetalleOrden detalleActualizado = detalleOrdenService.update(detalle.getId(), detalle);
+                    detallesUnicos.add(detalleActualizado);
                 }
             }
+
+            // Asignamos la lista de detalles única a la orden
+            ordenGuardada.setDetalles(detallesUnicos);
         }
 
         // Crear preferencia de MercadoPago
@@ -129,9 +127,9 @@ public class OrdenCompraService {
                 throw new IllegalArgumentException("La cantidad y el precio deben ser mayores a cero.");
             }
 
-            //🧠 Cargar el productoTalle desde la BD usando su ID
+            // Cargar productoTalle desde la base de datos usando su ID
             Long ptId = detalle.getProductoTalle().getId();
-           var productoTalle = productoTalleRepository.findById(ptId)
+            var productoTalle = productoTalleRepository.findById(ptId)
                     .orElseThrow(() -> new IllegalArgumentException("ProductoTalle no encontrado con ID: " + ptId));
 
             var producto = productoTalle.getProducto();
@@ -140,27 +138,23 @@ public class OrdenCompraService {
                 throw new IllegalArgumentException("El producto debe tener nombre y descripción completos.");
             }
 
-            // Agregar ítem a la preferencia
+            // Agregar ítem válido a la preferencia
             items.add(PreferenceItemRequest.builder()
                     .id(productoTalle.getId().toString())
                     .title(producto.getNombre())
                     .description(producto.getDescripcion())
-                    .unitPrice(BigDecimal.valueOf(detalle.getPrecio()))
+                    .unitPrice(BigDecimal.valueOf(detalle.getPrecio())) // No modificar precio aquí
                     .quantity(detalle.getCantidad())
                     .currencyId("ARS")
                     .build());
         }
 
-        // URLs de redirección post-pago
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
                 .success("https://youtu.be/dQw4w9WgXcQ?si=-Axp2WQ3zUkxCQjc")
                 .failure("https://www.youtube.com/watch?v=lOg-0rEkWjw")
                 .pending("https://www.youtube.com/watch?v=lOg-0rEkWjw")
                 .build();
 
-
-
-        // Construcción final de la preferencia
         return PreferenceRequest.builder()
                 .items(items)
                 .backUrls(backUrls)

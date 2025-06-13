@@ -29,10 +29,16 @@ public class DetalleOrdenServiceImpl implements DetalleOrdenService {
 
     @Override
     public DetalleOrden save(DetalleOrden detalleOrden) {
+        // Establecer el flag 'eliminado' como false para nuevos detalles
+        detalleOrden.setEliminado(false);
+        
+        // Asegurar que la relación con orden es correcta sin usar addDetalle
+        // que es lo que estaba causando duplicados
         if (detalleOrden.getOrden() != null) {
-            detalleOrden.getOrden().addDetalle(detalleOrden); // Asociamos el detalle con la orden
+            // No hacemos nada extra aquí, simplemente dejamos la relación establecida
         }
-        detalleOrden.setEliminado(false); // Por defecto, el detalle no está marcado como eliminado
+        
+        // Guardar el detalle
         return detalleOrdenRepository.save(detalleOrden);
     }
 

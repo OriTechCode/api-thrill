@@ -43,12 +43,30 @@ public class OrdenCompra extends Base {
     @JsonIgnoreProperties({"orden", "usuario"})  // Agregamos "usuario" aquí
     private List<DetalleOrden> detalles = new ArrayList<>(); // Inicializamos la lista
 
-    // Método helper para mantener la consistencia bidireccional
+    // Método modificado para evitar duplicados
     public void addDetalle(DetalleOrden detalle) {
         if (detalles == null) {
             detalles = new ArrayList<>();
         }
-        detalles.add(detalle);
-        detalle.setOrden(this);
+        
+        // Verificar si el detalle ya existe en la colección
+        boolean existe = false;
+        for (DetalleOrden d : detalles) {
+            if (d.equals(detalle) || 
+                (detalle.getId() != null && d.getId() != null && d.getId().equals(detalle.getId()))) {
+                existe = true;
+                break;
+            }
+        }
+        
+        // Solo agregar si no existe
+        if (!existe) {
+            detalles.add(detalle);
+            
+            // Establecer la relación inversa solo si es necesario
+            if (detalle.getOrden() != this) {
+                detalle.setOrden(this);
+            }
+        }
     }
 }

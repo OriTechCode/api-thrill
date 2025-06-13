@@ -1,5 +1,6 @@
 package com.api.thrill.controller;
 
+import com.api.thrill.entity.DetalleOrden;
 import com.api.thrill.entity.OrdenCompra;
 import com.api.thrill.service.OrdenCompraService;
 import com.mercadopago.MercadoPagoConfig;
@@ -29,20 +30,30 @@ public class PagoController {
      */
     @PostMapping("/crear")
     public ResponseEntity<Map<String, Object>> crearOrden(@RequestBody OrdenCompra orden) throws Exception {
-
         MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
-
+        
+        // Verificar usuario
+        if (orden.getUsuario() != null && orden.getUsuario().getId() != null) {
+            // Si la orden tiene detalles, asegurar que cada detalle tenga referencia al usuario
+            if (orden.getDetalles() != null) {
+                for (DetalleOrden detalle : orden.getDetalles()) {
+                    detalle.setUsuario(orden.getUsuario());
+                }
+            }
+        }
+        
+        // Procesar la orden
         OrdenCompra ordenCreada = ordenCompraService.crearOrden(orden);
-
-        // Volvés a crear la preferencia para obtener el init_point
+        
+        // Preparar respuesta
         PreferenceClient client = new PreferenceClient();
         PreferenceRequest preferenceRequest = ordenCompraService.construirPreferencia(ordenCreada);
         Preference preference = client.create(preferenceRequest);
-
+        
         Map<String, Object> respuesta = new HashMap<>();
         respuesta.put("orden", ordenCreada);
         respuesta.put("init_point", preference.getInitPoint());
-
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
     }
 
