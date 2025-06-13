@@ -2,6 +2,7 @@
 
 package com.api.thrill.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import jakarta.persistence.*;
@@ -32,6 +33,7 @@ public class ProductoTalle extends Base {
 
     @OneToMany(mappedBy = "productoTalle")
     @JsonIgnoreProperties({"productoTalle", "detalles"})
+    @JsonIgnore
     private List<DetalleOrden> detalles;
 
 
