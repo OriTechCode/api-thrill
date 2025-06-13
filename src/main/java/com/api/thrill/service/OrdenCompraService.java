@@ -119,9 +119,9 @@ public class OrdenCompraService {
                 throw new IllegalArgumentException("La cantidad y el precio deben ser mayores a cero.");
             }
 
-            // 🧠 Cargar el productoTalle desde la BD usando su ID
+            //🧠 Cargar el productoTalle desde la BD usando su ID
             Long ptId = detalle.getProductoTalle().getId();
-            var productoTalle = productoTalleRepository.findById(ptId)
+           var productoTalle = productoTalleRepository.findById(ptId)
                     .orElseThrow(() -> new IllegalArgumentException("ProductoTalle no encontrado con ID: " + ptId));
 
             var producto = productoTalle.getProducto();

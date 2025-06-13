@@ -22,7 +22,6 @@ public class ProductoDTO {
     private Double precio;
     private String color;
     private List<Categoria> categorias;
-    private List<Long> categoriaIds;
     private Tipo tipo;
     private List<String> imagenesUrls;
 
