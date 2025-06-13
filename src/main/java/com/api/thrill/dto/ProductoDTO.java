@@ -1,6 +1,7 @@
 package com.api.thrill.dto;
 
 
+import com.api.thrill.entity.Categoria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,13 +13,15 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductoDTO extends Producto{
+public class ProductoDTO {
 
     private String nombre;
     private String descripcion;
     private String marca;
     private Double precio;
     private String color;
+    private List<Categoria> categorias;
+    private List<Long> categoriaIds;
 
     private List<String> imagenesUrls;
 

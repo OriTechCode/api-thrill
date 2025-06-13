@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public abstract class ProductoServiceImpl extends BaseServiceImpl<Producto, Long> implements ProductoService {
+public class ProductoServiceImpl extends BaseServiceImpl<Producto, Long> implements ProductoService {
 
     private final ProductoRepository productoRepository;
     private final CategoriaRepository categoriaRepository;
@@ -40,5 +40,25 @@ public abstract class ProductoServiceImpl extends BaseServiceImpl<Producto, Long
         }
 
         return productoRepository.save(producto);
+    }
+
+    @Override
+    public List<Producto> findByNombre(String nombre) {
+        return productoRepository.findByNombreContainingIgnoreCase(nombre);
+    }
+
+    @Override
+    public List<Producto> findByMarca(String marca) {
+        return productoRepository.findByMarcaIgnoreCase(marca);
+    }
+
+    @Override
+    public List<Producto> findByTipo(String nombreTipo) {
+        return productoRepository.findByTipoNombreIgnoreCase(nombreTipo);
+    }
+
+    @Override
+    public List<Producto> findByCategoriaAndTalle(String nombreCategoria, String talle) {
+        return productoRepository.findByCategoriaAndTalle(nombreCategoria, talle);
     }
 }
