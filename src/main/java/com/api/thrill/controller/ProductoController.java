@@ -34,6 +34,7 @@ public class ProductoController extends BaseController<Producto, Long> {
         try {
             Producto producto = productoService.crearProductoDesdeDTO(productoDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(producto);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", e.getMessage()));

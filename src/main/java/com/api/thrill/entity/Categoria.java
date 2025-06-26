@@ -19,6 +19,7 @@ public class Categoria extends Base {
 
 
     @ManyToMany(mappedBy = "categorias")
+    @JsonIgnoreProperties("categorias")
     private List<Producto> productos;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)

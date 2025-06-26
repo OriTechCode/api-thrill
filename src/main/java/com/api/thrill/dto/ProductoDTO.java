@@ -16,16 +16,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductoDTO {
-
     private String nombre;
     private String descripcion;
     private String marca;
     private Double precio;
     private String color;
-    private List<Categoria> categorias;
-    private Tipo tipo;
-    private List<String> imagenes;
-
-
-
+    private List<Long> categoriaIds;  // Ya está correcto
+    private Long tipoId;  // Cambiar de "tipoid" a "tipoId" y de "long" a "Long"
+    private List<String> imagenes;  // Ya está correcto
 }

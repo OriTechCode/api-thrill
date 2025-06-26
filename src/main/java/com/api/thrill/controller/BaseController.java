@@ -27,6 +27,11 @@ public abstract class BaseController<T, ID> {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/eliminados")
+    public ResponseEntity<List<T>> getAllDeleted() {
+        return ResponseEntity.ok(baseService.findAllDeleted());
+    }
+
     @PostMapping
     public ResponseEntity<T> create(@RequestBody T entity) {
         return ResponseEntity.ok(baseService.save(entity));

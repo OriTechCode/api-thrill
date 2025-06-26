@@ -36,6 +36,7 @@ public class Producto extends Base {
             joinColumns = @JoinColumn(name = "id_producto"),
             inverseJoinColumns = @JoinColumn(name = "id_categoria")
     )
+    @JsonIgnoreProperties("productos")
     private List<Categoria> categorias;
 
     //esto es redundante por parte de la normalizacion , pero es practico para nosotros

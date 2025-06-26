@@ -17,7 +17,6 @@ public abstract class BaseServiceImpl<T extends Base, ID> implements BaseService
 
     @Override
     public List<T> findAll() {
-
         return repository.findAll().stream()
                 .filter(entity -> !entity.getEliminado())
                 .toList();
@@ -52,5 +51,12 @@ public abstract class BaseServiceImpl<T extends Base, ID> implements BaseService
         } else {
             throw new RuntimeException("Entidad no encontrada con ID: " + id);
         }
+    }
+    
+    @Override
+    public List<T> findAllDeleted() {
+        return repository.findAll().stream()
+                .filter(entity -> entity.getEliminado())
+                .toList();
     }
 }

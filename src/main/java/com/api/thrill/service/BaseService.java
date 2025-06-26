@@ -9,4 +9,5 @@ public interface BaseService <T, ID> {
     T save(T entity);
     T update(ID id, T entity);
     void delete(ID id);
+    List<T> findAllDeleted(); // Nuevo método para obtener entidades eliminadas lógicamente
 }
