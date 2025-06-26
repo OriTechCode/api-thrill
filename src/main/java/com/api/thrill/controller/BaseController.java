@@ -1,5 +1,6 @@
 package com.api.thrill.controller;
 
+import com.api.thrill.dto.ProductoDTO;
 import com.api.thrill.service.BaseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,4 +42,5 @@ public abstract class BaseController<T, ID> {
         baseService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
 }

@@ -24,7 +24,7 @@ public class ProductoDTO {
     private String color;
     private List<Categoria> categorias;
     private Tipo tipo;
-    private List<String> imagenesUrls;
+    private List<String> imagenes;
 
 
 
