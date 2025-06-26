@@ -1,5 +1,6 @@
 package com.api.thrill.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,5 +16,6 @@ public class Imagen extends Base {
 
     @ManyToOne
     @JoinColumn(name = "producto_id")
+    @JsonIgnoreProperties("imagenes")
     private Producto producto;
 }

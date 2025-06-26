@@ -27,6 +27,7 @@ public class Producto extends Base {
     private String marca;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"producto", "detalles"})
     private List<Imagen> imagenes = new ArrayList<>();
 
 
