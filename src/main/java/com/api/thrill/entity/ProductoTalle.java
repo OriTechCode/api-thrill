@@ -31,11 +31,5 @@ public class ProductoTalle extends Base {
     @JoinColumn(name = "talle_id")
     private Talle talle;
 
-    @OneToMany(mappedBy = "productoTalle")
-    @JsonIgnoreProperties({"productoTalle", "detalles"})
-    @JsonIgnore
-    private List<DetalleOrden> detalles;
-
-
     private int stock;
 }
