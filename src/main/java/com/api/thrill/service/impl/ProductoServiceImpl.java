@@ -12,8 +12,6 @@ import com.api.thrill.service.ProductoService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductoServiceImpl extends BaseServiceImpl<Producto, Long> implements ProductoService {
@@ -85,17 +83,17 @@ public Producto crearProductoDesdeDTO(ProductoDTO dto) {
 
     @Override
     public List<Producto> findByNombre(String nombre) {
-        return productoRepository.findByNombreContainingIgnoreCase(nombre);
+        return productoRepository.findByNombreContainingIgnoreCaseAndEliminadoFalse(nombre);
     }
 
     @Override
     public List<Producto> findByMarca(String marca) {
-        return productoRepository.findByMarcaIgnoreCase(marca);
+        return productoRepository.findByMarcaIgnoreCaseAndEliminadoFalse(marca);
     }
 
     @Override
     public List<Producto> findByTipo(String nombreTipo) {
-        return productoRepository.findByTipoNombreIgnoreCase(nombreTipo);
+        return productoRepository.findByTipoNombreIgnoreCaseAndEliminadoFalse(nombreTipo);
     }
 
     @Override

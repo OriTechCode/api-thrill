@@ -10,10 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
-    List<Producto> findByNombreContainingIgnoreCase(String nombre);
-    List<Producto> findByMarcaIgnoreCase(String marca);
+    List<Producto> findByNombreContainingIgnoreCaseAndEliminadoFalse(String nombre);
+    List<Producto> findByMarcaIgnoreCaseAndEliminadoFalse(String marca);
 
-    List<Producto> findByTipoNombreIgnoreCase(String nombreTipo);
+    List<Producto> findByTipoNombreIgnoreCaseAndEliminadoFalse(String nombreTipo);
 
     // Método personalizado para filtrar por categoría y/o por talle
     @Query("SELECT p FROM Producto p \n" +
@@ -21,7 +21,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
             "LEFT JOIN p.productoTalles pt \n" +
             "LEFT JOIN pt.talle t \n" +
             "WHERE (:nombreCategoria IS NULL OR c.nombre = :nombreCategoria) \n" +
-            "AND (:talle IS NULL OR t.talle = :talle)\n")
+            "AND (:talle IS NULL OR t.talle = :talle)\n" +
+            "And p.eliminado = false\n")
     List<Producto> findByCategoriaAndTalle(
             @org.springframework.lang.Nullable String nombreCategoria,
             @org.springframework.lang.Nullable String talle);

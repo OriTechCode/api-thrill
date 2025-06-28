@@ -150,9 +150,9 @@ public class OrdenCompraService {
         }
 
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success("https://youtu.be/dQw4w9WgXcQ?si=-Axp2WQ3zUkxCQjc")
-                .failure("https://www.youtube.com/watch?v=lOg-0rEkWjw")
-                .pending("https://www.youtube.com/watch?v=lOg-0rEkWjw")
+                .success("https://1b88-38-51-31-185.ngrok-free.app/carrito?message=pagado")
+                .failure("https://1b88-38-51-31-185.ngrok-free.app/carrito?message=fallido")
+                .pending("")
                 .build();
 
         return PreferenceRequest.builder()
