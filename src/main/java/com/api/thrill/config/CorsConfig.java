@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173", "https://thrillweb.netlify.app/") // Desarrollo y Producción
+                        .allowedOrigins("http://localhost:5173", "https://thrillweb.netlify.app") // Desarrollo y Producción
 
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos
                         .allowedHeaders("Content-Type", "Authorization", "X-Requested-With", "Accept") // Cabeceras explícitas
