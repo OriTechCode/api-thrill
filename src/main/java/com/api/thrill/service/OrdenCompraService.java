@@ -150,8 +150,8 @@ public class OrdenCompraService {
         }
 
         PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                .success("https://1b88-38-51-31-185.ngrok-free.app/carrito?message=pagado")
-                .failure("https://1b88-38-51-31-185.ngrok-free.app/carrito?message=fallido")
+                .success("https://thrillweb.netlify.app/carrito?message=pagado")
+                .failure("https://thrillweb.netlify.app/carrito?message=fallido")
                 .pending("")
                 .build();
 
