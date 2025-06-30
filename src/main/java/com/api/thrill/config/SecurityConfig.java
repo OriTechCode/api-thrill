@@ -33,26 +33,26 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                // 🛑 POST que se permiten sin ser ADMIN
+                                //  POST que se permiten sin ser ADMIN
                                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/usuarios/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/pagos/**").hasAnyRole("ADMIN", "USER")
                                 .requestMatchers(HttpMethod.POST, "/api/ordenes/**").hasAnyRole("ADMIN", "USER")
                                 .requestMatchers(HttpMethod.POST, "/api/direcciones/**").hasAnyRole("ADMIN", "USER")
 
-                                // ✅ GET públicos para todos los endpoints excepto usuarios
+                                //  GET públicos para todos los endpoints excepto usuarios
                                 .requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
 
-                                // 🛡️ Cualquier otro POST, PUT o DELETE requiere ser ADMIN
+                                // ️ Cualquier otro POST, PUT o DELETE requiere ser ADMIN
                                 .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
 
-                                // 🧾 Swagger y documentación públicas
+                                //  Swagger y documentación públicas
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
-                                // 🔒 Todo lo demás requiere estar autenticado
+                                //  Todo lo demás requiere estar autenticado
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
