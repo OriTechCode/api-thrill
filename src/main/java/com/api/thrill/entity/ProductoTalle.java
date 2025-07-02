@@ -21,7 +21,6 @@ public class ProductoTalle extends Base {
 
 
     @ManyToOne
-
     @JoinColumn(name = "producto_id")
     @JsonIgnoreProperties({"productoTalles", "tipo"})
     private Producto producto;
