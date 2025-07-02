@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class OrdenCompra extends Base {
     private String metodoPago;
 
     private String estadoOrden;
+
+    private BigDecimal costoEnvio;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")

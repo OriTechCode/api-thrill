@@ -102,7 +102,7 @@ public class OrdenCompraService {
                 case "approved" -> {
                     orden.setEstadoOrden(EstadoOrden.PAGADO.toString());
 
-                    // 🔥 Obtener usuario y limpiar carrito
+                    // Obtener usuario y limpiar carrito
                     if (orden.getUsuario() != null) {
                         Long usuarioId = orden.getUsuario().getId();
                         detalleOrdenService.deleteByUsuarioId(usuarioId);
@@ -144,6 +144,16 @@ public class OrdenCompraService {
                     .description(producto.getDescripcion())
                     .unitPrice(BigDecimal.valueOf(detalle.getPrecio())) // No modificar precio aquí
                     .quantity(detalle.getCantidad())
+                    .currencyId("ARS")
+                    .build());
+        }
+        // Solo si se envió un costo de envío
+        if (orden.getCostoEnvio() != null && orden.getCostoEnvio().compareTo(BigDecimal.ZERO) > 0) {
+            items.add(PreferenceItemRequest.builder()
+                    .title("Costo de Envío")
+                    .description("Costo según ubicación o tipo de envío")
+                    .unitPrice(orden.getCostoEnvio())
+                    .quantity(1)
                     .currencyId("ARS")
                     .build());
         }
