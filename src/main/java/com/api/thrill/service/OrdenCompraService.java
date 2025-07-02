@@ -46,7 +46,7 @@ public class OrdenCompraService {
 
     public OrdenCompra crearOrden(OrdenCompra orden) throws Exception {
         orden.setEstadoOrden(EstadoOrden.PENDIENTE.toString());
-
+        orden.setMetodoPago("Mercado Pago");
         // Guardamos la orden inicialmente
         OrdenCompra ordenGuardada = ordenCompraRepository.save(orden);
 
@@ -169,7 +169,7 @@ public class OrdenCompraService {
                 .backUrls(backUrls)
                 .autoReturn("approved")
                 .externalReference(String.valueOf(orden.getId()))
-                .notificationUrl("https://api-thrill-production.up.railway.app/api/pagos/webhook")
+                .notificationUrl("https://api-thrill-production-85ac.up.railway.app/api/pagos/webhook")
                 .build();
     }
 

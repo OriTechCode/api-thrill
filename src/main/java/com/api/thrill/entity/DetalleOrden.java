@@ -20,7 +20,7 @@ public class DetalleOrden extends Base  {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    @JsonIgnoreProperties({"detalles", "ordenes", "password"})
+    @JsonIgnoreProperties({"detalles", "ordenes", "password" , "direcciones"})
     private Usuario usuario;
 
     @ManyToOne
