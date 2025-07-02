@@ -51,6 +51,9 @@ public class SecurityConfig {
 
                                 //  Swagger y documentación públicas
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                                // webhook del mp
+                                .requestMatchers(HttpMethod.POST, "/api/pagos/webhook").permitAll()
+
 
                                 //  Todo lo demás requiere estar autenticado
                                 .anyRequest().authenticated()
