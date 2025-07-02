@@ -4,7 +4,6 @@ import com.api.thrill.entity.OrdenCompra;
 import com.api.thrill.entity.enums.EstadoOrden;
 import com.api.thrill.repository.OrdenCompraRepository;
 import com.api.thrill.repository.ProductoTalleRepository;
-import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
@@ -165,4 +164,7 @@ public class OrdenCompraService {
     }
 
 
+    public List<OrdenCompra> findByUsuarioId(Long id) {
+        return ordenCompraRepository.findByUsuarioIdAndEliminadoFalse(id);
+    }
 }

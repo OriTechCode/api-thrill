@@ -15,6 +15,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     List<Producto> findByTipoNombreIgnoreCaseAndEliminadoFalse(String nombreTipo);
 
+
+
     // Método personalizado para filtrar por categoría y/o por talle
     @Query("SELECT p FROM Producto p \n" +
             "LEFT JOIN p.categorias c \n" +

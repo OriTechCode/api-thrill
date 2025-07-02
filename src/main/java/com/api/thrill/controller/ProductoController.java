@@ -27,7 +27,23 @@ public class ProductoController extends BaseController<Producto, Long> {
     public ResponseEntity<Producto> create(@RequestBody Producto entity) {
         return super.create(entity);
     }
+    // Sobreescribir el método create de BaseController para evitar el conflicto
+    @Override
+    @PutMapping("/base")
+    public ResponseEntity<Producto> update( @PathVariable Long id, @RequestBody Producto entity) {
+        return super.update(id , entity);
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody ProductoDTO dto) {
+        try {
+            Producto actualizado = productoService.actualizarProductoDesdeDTO(id, dto);
+            return ResponseEntity.ok(actualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody ProductoDTO productoDTO) {

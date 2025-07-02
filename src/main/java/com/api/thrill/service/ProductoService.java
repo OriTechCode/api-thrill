@@ -15,5 +15,6 @@ public interface ProductoService extends BaseService<Producto, Long> {
     List<Producto> findByCategoriaAndTalle(String nombreCategoria, String talle);
 
     Producto crearProductoDesdeDTO(ProductoDTO dto);
+    Producto actualizarProductoDesdeDTO(Long id, ProductoDTO dto);
 
 }

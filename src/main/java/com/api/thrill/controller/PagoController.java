@@ -57,7 +57,10 @@ public class PagoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
     }
 
-
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<OrdenCompra>> getOrdenesPorUsuarioId(@PathVariable Long id) {
+        return ResponseEntity.ok(ordenCompraService.findByUsuarioId(id));
+    }
     /**
      * Obtener el estado de la orden de compra.
      */

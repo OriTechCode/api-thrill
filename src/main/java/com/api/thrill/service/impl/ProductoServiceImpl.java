@@ -80,6 +80,62 @@ public Producto crearProductoDesdeDTO(ProductoDTO dto) {
         throw e;
     }
 }
+    @Override
+    public Producto actualizarProductoDesdeDTO(Long id, ProductoDTO dto) {
+        try {
+            Producto producto = productoRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
+
+            producto.setNombre(dto.getNombre());
+            producto.setDescripcion(dto.getDescripcion());
+            producto.setMarca(dto.getMarca());
+            producto.setPrecio(dto.getPrecio());
+            producto.setColor(dto.getColor());
+
+            // Actualizar Tipo
+            if (dto.getTipoId() != null) {
+                Tipo tipo = tipoRepository.findById(dto.getTipoId())
+                        .orElseThrow(() -> new RuntimeException("Tipo no encontrado con ID: " + dto.getTipoId()));
+                producto.setTipo(tipo);
+            } else {
+                producto.setTipo(null);
+            }
+
+            // Actualizar Categorías
+            if (dto.getCategoriaIds() != null) {
+                List<Categoria> categorias = categoriaRepository.findAllById(dto.getCategoriaIds());
+                if (categorias.size() != dto.getCategoriaIds().size()) {
+                    throw new RuntimeException("No se encontraron todas las categorías solicitadas");
+                }
+                producto.setCategorias(categorias);
+            } else {
+                producto.setCategorias(List.of());
+            }
+
+            // Limpiar imágenes previas
+            producto.getImagenes().clear();
+
+            // Guardar primero el producto limpio
+            Producto guardado = productoRepository.save(producto);
+
+            // Volver a agregar nuevas imágenes
+            if (dto.getImagenes() != null) {
+                for (String url : dto.getImagenes()) {
+                    Imagen imagen = new Imagen();
+                    imagen.setUrl(url);
+                    imagen.setProducto(guardado);
+                    guardado.getImagenes().add(imagen);
+                }
+            }
+
+            return productoRepository.save(guardado);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
 
     @Override
     public List<Producto> findByNombre(String nombre) {
