@@ -23,6 +23,7 @@ public class DetalleOrden extends Base  {
     @JsonIgnoreProperties({"detalles", "ordenes", "password" , "direcciones"})
     private Usuario usuario;
 
+    @ManyToOne
 
     @JoinColumn(name = "producto-talle_id")
     @JsonIgnoreProperties({"detalles"})
