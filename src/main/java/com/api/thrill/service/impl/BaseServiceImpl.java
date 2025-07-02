@@ -35,11 +35,19 @@ public abstract class BaseServiceImpl<T extends Base, ID> implements BaseService
 
     @Override
     public T update(ID id, T entity) {
-        if (!repository.existsById(id)) {
+        // Verificar que existe
+        Optional<T> existenteOpt = repository.findById(id);
+        if (existenteOpt.isEmpty()) {
             throw new RuntimeException("Entidad no encontrada con ID: " + id);
         }
+
+        // Asegurar que se mantenga el mismo ID
+        entity.setId((Long) id);
+        entity.setEliminado(false); // Por si el original estaba eliminado
+
         return repository.save(entity);
     }
+
 
     @Override
     public void delete(ID id) {
@@ -52,7 +60,7 @@ public abstract class BaseServiceImpl<T extends Base, ID> implements BaseService
             throw new RuntimeException("Entidad no encontrada con ID: " + id);
         }
     }
-    
+
     @Override
     public List<T> findAllDeleted() {
         return repository.findAll().stream()
