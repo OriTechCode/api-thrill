@@ -10,10 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DetalleOrdenServiceImpl implements DetalleOrdenService {
+public class DetalleOrdenServiceImpl extends BaseServiceImpl<DetalleOrden, Long> implements DetalleOrdenService {
 
     @Autowired
-    private DetalleOrdenRepository detalleOrdenRepository;
+    private final DetalleOrdenRepository detalleOrdenRepository;
+    public DetalleOrdenServiceImpl(DetalleOrdenRepository detalleOrdenRepository) {
+        super(detalleOrdenRepository);
+        this.detalleOrdenRepository = detalleOrdenRepository;
+
+    }
 
     @Override
     public List<DetalleOrden> findAll() {
@@ -42,16 +47,7 @@ public class DetalleOrdenServiceImpl implements DetalleOrdenService {
         return detalleOrdenRepository.save(detalleOrden);
     }
 
-    @Override
-    public void deleteById(Long id) {
-        Optional<DetalleOrden> detalle = detalleOrdenRepository.findById(id);
-        if (detalle.isEmpty() || detalle.get().getEliminado()) {
-            throw new RuntimeException("Detalle de orden no encontrado o ya eliminado con ID: " + id);
-        }
-        DetalleOrden detalleOrden = detalle.get();
-        detalleOrden.setEliminado(true); // Actualizar el estado eliminado
-        detalleOrdenRepository.save(detalleOrden); // Guardar estado actualizado
-    }
+
 
     @Override
     public DetalleOrden update(Long id, DetalleOrden detalleOrden) {

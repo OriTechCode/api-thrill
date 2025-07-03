@@ -12,4 +12,9 @@ public interface OrdenCompraRepository extends JpaRepository<OrdenCompra, Long> 
     List<OrdenCompra> findByUsuarioIdAndEliminadoFalse(Long usuarioId);
 
     List<OrdenCompra> findByEstadoOrden(EstadoOrden estadoOrden); // Corregido aquí
+
+    List<OrdenCompra> findByEliminadoTrue();
+
+
+
 }

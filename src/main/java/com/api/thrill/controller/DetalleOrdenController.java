@@ -11,10 +11,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/detalles-orden")
-public class DetalleOrdenController {
+public class DetalleOrdenController extends BaseController<DetalleOrden, Long>{
 
     @Autowired
-    private DetalleOrdenService detalleOrdenService;
+    private final DetalleOrdenService detalleOrdenService;
+
+    public DetalleOrdenController(DetalleOrdenService detalleOrdenService) {
+        super(detalleOrdenService);
+        this.detalleOrdenService = detalleOrdenService;
+    }
 
     @GetMapping
     public ResponseEntity<List<DetalleOrden>> getAll() {
@@ -48,15 +53,7 @@ public class DetalleOrdenController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        try {
-            detalleOrdenService.deleteById(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Detalle de Orden no encontrado.");
-        }
-    }
+
 
 
     @DeleteMapping("/usuario/{usuarioId}")

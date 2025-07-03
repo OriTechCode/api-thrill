@@ -103,10 +103,10 @@ public class OrdenCompraService {
                     orden.setEstadoOrden(EstadoOrden.PAGADO.toString());
 
                     // Obtener usuario y limpiar carrito
-                    if (orden.getUsuario() != null) {
-                        Long usuarioId = orden.getUsuario().getId();
-                        detalleOrdenService.deleteByUsuarioId(usuarioId);
-                    }
+                    //if (orden.getUsuario() != null) {
+                      //  Long usuarioId = orden.getUsuario().getId();
+                       // detalleOrdenService.deleteByUsuarioId(usuarioId);
+                    //}
                 }
                 case "pending" -> orden.setEstadoOrden(EstadoOrden.PENDIENTE.toString());
                 case "rejected" -> orden.setEstadoOrden(EstadoOrden.CANCELADO.toString());
@@ -177,4 +177,19 @@ public class OrdenCompraService {
     public List<OrdenCompra> findByUsuarioId(Long id) {
         return ordenCompraRepository.findByUsuarioIdAndEliminadoFalse(id);
     }
+
+
+    public void deleteById(Long id) throws Exception {
+        OrdenCompra orden = ordenCompraRepository.findById(id)
+                .orElseThrow(() -> new Exception("Orden no encontrada con ID: " + id));
+
+        orden.setEliminado(true);
+        ordenCompraRepository.save(orden);
+    }
+    public List<OrdenCompra> findDeleted() {
+        return ordenCompraRepository.findByEliminadoTrue();
+    }
+
+
+
 }

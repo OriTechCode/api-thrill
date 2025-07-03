@@ -125,4 +125,20 @@ public class PagoController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarOrden(@PathVariable Long id) {
+        try {
+            ordenCompraService.deleteById(id);
+            return ResponseEntity.ok("Orden eliminada lógicamente.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/eliminadas")
+    public ResponseEntity<List<OrdenCompra>> obtenerOrdenesEliminadas() {
+        List<OrdenCompra> eliminadas = ordenCompraService.findDeleted();
+        return ResponseEntity.ok(eliminadas);
+    }
+
 }
