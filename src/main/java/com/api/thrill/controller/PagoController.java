@@ -107,4 +107,22 @@ public class PagoController {
                     .body("Error procesando webhook: " + e.getMessage());
         }
     }
+
+    @PostMapping("/webhook/test")
+    public ResponseEntity<String> testWebhook(@RequestBody Map<String, Object> body) {
+        MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
+
+        try {
+            String type = (String) body.get("type");
+            Map<String, Object> data = (Map<String, Object>) body.get("data");
+            String dataId = data.get("id").toString();
+
+            ordenCompraService.procesarWebhook(type, dataId);
+            return ResponseEntity.ok("✅ Webhook procesado correctamente en modo TEST.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("❌ Error procesando webhook test: " + e.getMessage());
+        }
+    }
+
 }

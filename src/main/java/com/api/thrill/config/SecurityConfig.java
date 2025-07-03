@@ -54,7 +54,7 @@ public class SecurityConfig {
 
                                 // webhook del mp
                                 .requestMatchers(HttpMethod.POST, "/api/pagos/webhook").permitAll()
-
+                                .requestMatchers(HttpMethod.POST, "/api/pagos/webhook/test").permitAll()
 
                                 //  Todo lo demás requiere estar autenticado
                                 .anyRequest().authenticated()
