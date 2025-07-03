@@ -34,6 +34,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 //  POST que se permiten sin ser ADMIN
+
+                                .requestMatchers(HttpMethod.POST, "/api/pagos/webhook").permitAll()// webhook del mp
+                                .requestMatchers(HttpMethod.POST, "/api/pagos/webhook/test").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/usuarios/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/pagos/**").hasAnyRole("ADMIN", "USER")
@@ -52,9 +55,7 @@ public class SecurityConfig {
                                 //  Swagger y documentación públicas
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
-                                // webhook del mp
-                                .requestMatchers(HttpMethod.POST, "/api/pagos/webhook").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/pagos/webhook/test").permitAll()
+
 
                                 //  Todo lo demás requiere estar autenticado
                                 .anyRequest().authenticated()
