@@ -102,11 +102,25 @@ public class OrdenCompraService {
                 case "approved" -> {
                     orden.setEstadoOrden(EstadoOrden.PAGADO.toString());
 
-                    // Obtener usuario y limpiar carrito
-                    //if (orden.getUsuario() != null) {
-                      //  Long usuarioId = orden.getUsuario().getId();
-                       // detalleOrdenService.deleteByUsuarioId(usuarioId);
-                    //}
+                    if (orden.getDetalles() != null) {
+                        for (DetalleOrden detalle : orden.getDetalles()) {
+                            var productoTalle = detalle.getProductoTalle();
+                            if (productoTalle == null) continue;
+
+                            var pt = productoTalleRepository.findById(productoTalle.getId())
+                                    .orElseThrow(() -> new Exception("ProductoTalle no encontrado con ID: " + productoTalle.getId()));
+
+                            int nuevoStock = pt.getStock() - detalle.getCantidad();
+
+                            // Si el stock ya es cero o menor que la cantidad solicitada, lo dejamos en 0 sin lanzar error
+                            if (nuevoStock < 0) {
+                                nuevoStock = 0; // Alternativa: lanzar excepción si preferís evitar esto
+                            }
+
+                            pt.setStock(nuevoStock);
+                            productoTalleRepository.save(pt);
+                        }
+                    }
                 }
                 case "pending" -> orden.setEstadoOrden(EstadoOrden.PENDIENTE.toString());
                 case "rejected" -> orden.setEstadoOrden(EstadoOrden.CANCELADO.toString());
